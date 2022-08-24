@@ -41,11 +41,17 @@ namespace DescargasUI.Controllers
         {
            
             string[] lista = partidas.Split(',');
-
-            byte[] archivos = DescargasXmlNegocio.ObtenerXmls(anio, mes, lista, carpetas);
-            //string fileName = "Descarga_"+mes+"_"+anio; 
-            //return Json(new { url = archivos } , JsonRequestBehavior.AllowGet);
-            //return File(archivos,"application/zip");
+            byte[] archivos;
+            
+            if(mes == 0)
+            {
+                archivos = DescargasXmlNegocio.ObtenerXmlsAnio(anio, lista, carpetas);
+            }
+            else
+            {
+                archivos = DescargasXmlNegocio.ObtenerXmls(anio, mes, lista, carpetas);
+            }
+            
 
             return new ZipArchiveResult(archivos);
         }

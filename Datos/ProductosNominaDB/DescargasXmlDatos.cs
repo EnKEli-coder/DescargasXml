@@ -112,7 +112,7 @@ namespace Datos.ProductosNominaDB
 
         }
 
-        public static List<int> ObtenerTotal(int anio, int mes, string[] partidas)
+        public static List<int> ObtenerTotal(int anio, string mes, string partidas)
         {
             try
             {
@@ -123,20 +123,6 @@ namespace Datos.ProductosNominaDB
                     connection.Open();
                     SqlCommand command = new SqlCommand();
 
-                    string listaPartidas = "";
-
-                    int i = 0;
-
-                    foreach (var partida in partidas)
-                    {
-                        if (i != 0)
-                        {
-                            listaPartidas += ",";
-                        }
-                        listaPartidas += "'" + partida + "'";
-                        i++;
-                    }
-
                     string anioInterfaz = "";
                     if (anio != DateTime.Now.Year)
                     {
@@ -144,7 +130,7 @@ namespace Datos.ProductosNominaDB
                     }
 
                     command.Connection = connection;
-                    command.CommandText = $"SELECT  count (tlx.contenidoXML ) TotalXMl  , sum(tlx.isr) SumaISR FROM ProductosNomina.dbo.TBL_layoutXML tlx INNER JOIN Interfaces{anioInterfaz}.dbo.ACUM{anio} a  ON a.FOLIOCFDI = tlx.folio where SUBSTRING(a.PARTIDA,1,6) in ({listaPartidas}) and YEAR(tlx.FechaPago) = {anio} AND MONTH(tlx.FechaPago) = {mes} AND tlx._Status = 'E' and SUBSTRING(Archivo, 32, 3) != 'VTE'";
+                    command.CommandText = $"SELECT  count (tlx.contenidoXML ) TotalXMl  , sum(tlx.isr) SumaISR FROM ProductosNomina.dbo.TBL_layoutXML tlx INNER JOIN Interfaces{anioInterfaz}.dbo.ACUM{anio} a  ON a.FOLIOCFDI = tlx.folio where SUBSTRING(a.PARTIDA,1,6) in ({partidas}) and YEAR(tlx.FechaPago) = {anio} AND MONTH(tlx.FechaPago) in ({mes}) AND tlx._Status = 'E' and SUBSTRING(Archivo, 32, 3) != 'VTE'";
 
                     SqlDataReader reader = command.ExecuteReader();
                     

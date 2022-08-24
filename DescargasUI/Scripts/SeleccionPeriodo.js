@@ -20,6 +20,11 @@
             hidden.setAttribute("disabled", "");
             select.add(hidden);
 
+            var todos = document.createElement("option");
+            todos.value = "0";
+            todos.text = "Todos los meses";
+            select.add(todos);
+
             for (var value in json) {
                 var option = document.createElement("option");
                 option.value = value;
@@ -129,6 +134,7 @@ function obtenerPartidas(url) {
 function descargar(url) {
 
     var nombreCarpeta;
+    var nombreDescarga;
     var anio = document.getElementById("anios").value;
     var select = document.getElementById("meses");
     var mes = select.value;
@@ -151,6 +157,13 @@ function descargar(url) {
 
     if (seleccionados > 1) {
         nombreCarpeta = "XMLs";
+    }
+
+
+    if (mes == 0) {
+        nombreDescarga = nombreCarpeta + '_' + anio + '.zip';
+    } else {
+        nombreDescarga = nombreCarpeta + '_' + nombreMes + '_' + anio + '.zip';
     }
 
     for (let partida of partidas) {
@@ -188,7 +201,7 @@ function descargar(url) {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', nombreCarpeta+'_' + nombreMes+'_'+anio+'.zip');
+        link.setAttribute('download', nombreDescarga);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -236,7 +249,7 @@ function resume(url, datos) {
         }
     }
 
-    if (!(anioOption >= 0 && mesOption >= 1 && disposicion >= 0 && seleccionados > 0)) {
+    if (!(anioOption >= 0 && mesOption >= 0 && disposicion >= 0 && seleccionados > 0)) {
 
         var iconAnio = anioOption >= 0 ? 'fa-check' : 'fa-xmark';
         var iconMes = mesOption >= 1 ? 'fa-check' : 'fa-xmark';
@@ -330,7 +343,7 @@ function activarBoton() {
     var disposicion = orden.options[orden.selectedIndex].value;
     var boton = document.getElementById("boton-descarga");
 
-    if (mes >= 1 && disposicion >= 0) {
+    if (mes >= 0 && disposicion >= 0) {
         boton.classList.remove("disabled");
     }
 }
