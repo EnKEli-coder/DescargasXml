@@ -1,0 +1,453 @@
+﻿.icon::after {
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+.formulario-seleccion{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 0 5%;
+}
+
+html::-webkit-scrollbar {
+    width: 1em;
+    background-color: #fff;
+}
+
+html::-webkit-scrollbar-track {
+    width:1em;
+    background-color:#fff;
+    border-radius:100%;
+}
+
+html::-webkit-scrollbar-thumb {
+    background-color: rgb(84 86 91 / 0.67);
+    border-radius: 100%;
+}
+
+.contenedor-periodo {
+    justify-content: right;
+    display: inherit;
+    padding-top: 3em;
+    width: 50%;
+    max-height: 700px;
+}
+
+.periodo {
+    width: 250px;
+    height: 85%;
+    padding: 5px 10px;
+    background: #fff;
+    border-radius: 8px 0 0 8px;
+    color: #54565B;
+    overflow:auto;
+}
+
+.contenedor-archivos{
+    justify-content: left;
+    padding-top: 3em;
+    display: inherit;
+    width: 50%;
+    max-height: 700px;
+
+}
+
+#titulo-lista{
+    margin-top: 8px;
+    align-self:center
+}
+
+.archivos {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 85%;
+    background: #ffffff;
+    border-radius: 0 8px 8px 0;
+    padding: 10px;
+}
+
+.dashed-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border: 3px dashed #ddd;
+    padding-top: 10px;
+    overflow: auto;
+}
+
+.fa-circle-notch {
+    font-size: 40px;
+    font-weight: 900;
+    color: #A02141;
+    margin:auto;
+    display:none;
+}
+.xml-list {
+    list-style-type: none;
+    padding-left: 15px;
+}
+
+#lista-partidas{
+    display:none;
+}
+
+select {
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    padding: 0.5em 0em 0.5em 1em;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 100%;
+    cursor: pointer;
+}
+
+.custom-arrow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 3.5rem;
+    background: #A02141;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 8px 8px 0px;
+    pointer-events: none;
+}
+
+.custom-arrow.disabled {
+    background: rgb(160 33 65 / 0.35);
+}
+
+.fa-angle-down{
+    color: #ffffff;
+}
+
+.select {
+    position: relative;
+}
+
+.btn-submit {
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    width: 80%;
+    height: 3em;
+    color: white;
+    background-color: #A02141;
+    border-radius: 4px;
+    border: none;
+}
+
+.btn-submit.disabled {
+    background-color: rgb(160 33 65 / 0.35);
+}
+
+.btn-submit:active{
+    background-color: #631126;
+}
+
+.modal-footer > .btn-primary {
+    background-color: #A02141;
+    border-color: #A02141;
+}
+
+.modal-footer > .btn-primary:active:focus{
+    background-color: #A02141;
+    border-color: #A02141;
+}
+
+.modal-footer > .btn-primary:focus {
+    background-color: #A02141;
+    border-color: #A02141;
+}
+
+.modal-footer > .btn-primary:hover {
+    background-color: #A02141;
+    border-color: #A02141;
+}
+
+.fa-download{
+    margin-left: 5px;
+}
+
+.button-group{
+    display: flex;
+    flex-wrap: wrap;
+    height: 70%;
+    border: solid 1px #ddd;
+    border-radius: 4px;
+    padding-left: 0px;
+}
+
+.button-group > label {
+    display: flex;
+    align-items: center;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    padding-left: 10px;
+}
+
+.button-group > label:hover{
+    background: #ddd;
+}
+
+input[type="radio"]{
+    display: none;
+}
+
+input[type="radio"]:checked + label{
+    background-color: #A02141;
+    color: #fff;
+}
+
+input[type="checkbox"] {
+    display: flex;
+    justify-content: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 22px;
+    width: 22px;
+    min-height: 22px;
+    min-width: 22px;
+    background-color: #fff;
+    border: 2px solid #A02141;
+    border-radius: 2px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+    input[type="checkbox"]::after {
+        font-family: "Font Awesome 6 Free";
+        font: var(--fa-font-solid);
+        font-size: 18px;
+        font-weight: 900;
+        content: "\f00c";
+        color: #A02141;
+        display: none;
+    }
+
+    input[type="checkbox"]:hover {
+        background-color: #ddd;
+    }
+
+    input[type="checkbox"]:checked {
+        background-color: #fff;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    input[type="checkbox"]:checked:After {
+        display: block;
+    }
+
+.xml-list > li{
+    font-size: 22px;
+    display: flex;
+}
+
+
+label {
+    margin-left: 6px;
+    width: 100%;
+}
+
+.parent-list-item > label{
+    width: fit-content;
+}
+
+.parent-list-item{
+    display: flex;
+}
+
+.fa-plus {
+    font-size: 18px;
+    font-weight: 900;
+    color: #A02141;
+    margin: 6px 6px 0;
+    cursor:pointer;
+}
+
+.fa-plus:hover {
+    stroke: rgb(160 33 65 / 0.58);
+    stroke-width: 30;
+}
+
+.fa-minus {
+    font-size: 18px;
+    font-weight: 900;
+    color: #A02141;
+    margin: 6px 6px 0;
+    cursor: pointer;
+}
+
+.fa-minus:hover {
+    stroke: rgb(160 33 65 / 0.58);
+    stroke-width: 30;
+}
+/*.parent-list-item::before {
+    font-family: "Font Awesome 6 Free";
+    font: var(--fa-font-solid);
+    font-size: 16px;
+    font-weight: 900;
+    content: "\2b";
+    color: #A02141;
+    margin: 6px 6px 0;
+}
+
+.parent-list-item.active::before {
+    font-family: "Font Awesome 6 Free";
+    font: var(--fa-font-solid);
+    font-size: 16px;
+    font-weight: 900;
+    content: "\f068";
+    color: #A02141;
+    margin: 6px 6px 0;
+}*/
+
+.xml-list > li.check{
+    display: none;
+}
+
+.xml-list > li.check.active {
+    display: flex;
+    padding-left: 30px;
+}
+
+.popupswal .swal2-title {
+    font-size: 2.3em;
+}
+
+.popupswal .swal2-html-container {
+    font-size: 2em;
+    font-weight:600;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.popupswal .swal2-styled.swal2-confirm {
+    background-color: #A02141;
+    font-size: 1.4em;
+}
+
+.popupswal .swal2-styled.swal2-cancel {
+    font-size: 1.4em;
+}
+
+.popupswal .fa-check {
+    font-size: 1.1em;
+    font-weight: 900;
+    color: #00ff21;
+    margin: 6px 6px 0;
+    cursor: pointer;
+}
+
+.popupswal .fa-xmark {
+    font-size: 1.1em;
+    font-weight: 900;
+    color: #ff0000;
+    margin: 6px 8.625px 0;
+    cursor: pointer;
+}
+@media screen and (max-width: 600px){
+
+    .periodo select, .periodo button{
+        font-size: 1.6em;
+    }
+
+    .periodo h3,.archivos h3{
+        font-size: 2.1em;
+    }
+
+    .formulario-seleccion{
+        flex-direction: column;
+        padding: 5%;
+        height: fit-content;
+    }
+
+    .contenedor-periodo{
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .contenedor-archivos {
+        width: 100%;
+    }
+
+    .periodo{
+        width: 100%;
+        border-radius: 8px;
+        height: 100%;
+    }
+
+    .archivos {
+        
+        width: 100%;
+        border-radius: 8px;
+        min-height: 500px;
+        max-height: 600px;
+        overflow: auto;
+    }
+
+    .dashed-box {
+        width: 100%;
+        min-height: inherit;
+        max-height: auto;
+        
+    }
+
+    .btn-submit{
+        margin-bottom: 10px;
+    }
+
+    .xml-list > li{
+        font-size: 2.7em;
+    }
+
+    .xml-list > li.check.active {
+        padding-left: 1.5em;
+    }
+
+    input[type=checkbox]{
+        height: 1.1em;
+        width: 1.1em;
+        min-height: 1.1em;
+        min-width: 1.1em;
+        border: 4px solid #A02141;
+    }
+
+    input[type=checkbox]::after {
+        font-size: 0.9em;
+    }
+    
+    .fa-plus, .fa-minus{
+        font-size: 0.9em;
+    }
+
+    .popupswal .swal2-title {
+        font-size: 2.8em;
+    }
+
+    .popupswal .swal2-html-container {
+        font-size: 2.6em;
+    }
+
+    .popupswal .swal2-styled.swal2-confirm {
+        font-size: 2.4em;
+    }
+
+    .popupswal .swal2-styled.swal2-cancel {
+        font-size: 2.4em;
+    }
+}

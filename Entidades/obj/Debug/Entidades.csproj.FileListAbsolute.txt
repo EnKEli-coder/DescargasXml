@@ -1,0 +1,6 @@
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\bin\Debug\Entidades.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\bin\Debug\Entidades.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\obj\Debug\Entidades.csproj.AssemblyReference.cache
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\obj\Debug\Entidades.csproj.CoreCompileInputs.cache
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\obj\Debug\Entidades.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\obj\Debug\Entidades.pdb

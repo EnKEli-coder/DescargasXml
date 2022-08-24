@@ -1,0 +1,11 @@
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Debug\Negocio.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Debug\Negocio.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Debug\Datos.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Debug\Datos.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Debug\Negocio.csproj.AssemblyReference.cache
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Debug\Negocio.csproj.CoreCompileInputs.cache
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Debug\Negocio.csproj.CopyComplete
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Debug\Negocio.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Debug\Negocio.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Debug\Entidades.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Debug\Entidades.pdb
