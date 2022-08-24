@@ -44,11 +44,9 @@ namespace Negocio
             return partidasPorUnidades;
         }
 
-        public static List<int> ObtenerTotal(int anio, int mes, string[] partidas )
+        public static List<int> ObtenerTotal(int anio, int mes, string[] partidas)
         {
-            List<int> datos = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerTotal(anio, mes, partidas);
-
-            return datos;
+            return Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerTotal(anio, mes, partidas);
         }
 
 
@@ -63,7 +61,7 @@ namespace Negocio
                 DateTimeFormatInfo dateInfo = new CultureInfo("es-ES", false).DateTimeFormat;
                 string nombreMes = dateInfo.GetMonthName(mes);
 
-                string raiz = @"C:\Reportes\";      
+                string raiz = @"C:\Reporte\";
                 string carpetaDescargas;
 
                 if (carpetas == 0)
@@ -71,7 +69,7 @@ namespace Negocio
                     carpetaDescargas = Path.Combine(raiz, "XMLs_" + anio + "_" + nombreMes);
                     Directory.CreateDirectory(carpetaDescargas);
 
-                    foreach(XmlDTO xml in xmls)
+                    foreach (XmlDTO xml in xmls)
                     {
                         byte[] bytes = Encoding.Default.GetBytes(xml.contenidoXml);
                         string xmlValue = Encoding.UTF8.GetString(bytes);
@@ -135,7 +133,7 @@ namespace Negocio
                     }
                 }
 
-                
+
                 //origin del ramo se verifica y si existe se comprime
                 string zip = carpetaDescargas + ".zip";
 
@@ -144,24 +142,31 @@ namespace Negocio
                     if (!Directory.Exists(zip))
                     {
                         ZipFile.CreateFromDirectory(carpetaDescargas, zip);
+                        Directory.Delete(carpetaDescargas, true);
+
                     }
                 }
 
                 //obtener array de bits y regresar
-                var path = File.ReadAllBytes(zip);
+                var arrayDeBytesZip = File.ReadAllBytes(zip);
 
-                Directory.Delete(carpetaDescargas, true);
 
-                File.Delete(zip);
 
-                return path;
+                if (File.Exists(zip))
+                {
+                    File.Delete(zip);
+                }
+
+
+
+                return arrayDeBytesZip;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
 
-            
+
         }
     }
 }
