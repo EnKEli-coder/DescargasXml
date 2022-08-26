@@ -1,6 +1,5 @@
 ﻿function checkear(element) {
     event.stopPropagation();
-    var _parent = element;
     var nextli = element.parentElement.nextElementSibling.childNodes;
 
     if (element.checked) {
@@ -20,6 +19,23 @@
                 }
             });
         });
+    }
+}
+
+function checkAll(element) {
+
+    var ramos = document.getElementsByClassName("ramos");
+
+    if (element.checked) {
+        for (var ramo of ramos) {
+            ramo.checked = true;
+            checkear(ramo)
+        }
+    } else {
+        for (var ramo of ramos) {
+            ramo.checked = false;
+            checkear(ramo);
+        }
     }
 }
 

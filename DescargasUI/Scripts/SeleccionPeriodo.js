@@ -50,7 +50,9 @@ function obtenerPartidas(url) {
     var carpetas = document.getElementById("orden");
     var spanCarpetas = document.getElementById("span-orden");
 
+    var checkAll = document.getElementById("container-mark-all");
     var lista = document.getElementById("lista-partidas");
+    checkAll.style.display = "none";
     lista.style.display = "none";
 
     var cargando = document.getElementById("carga");
@@ -107,6 +109,7 @@ function obtenerPartidas(url) {
 
             cargando.style.display = "none";
             lista.style.display = "block";
+            checkAll.style.display = "flex";
 
 
             boton.classList.add("disabled");
@@ -216,13 +219,9 @@ function descargar(url) {
             }
         })
 
-
         obtenerMeses("/DescargasXml/DescargasXml");
         obtenerPartidas('/DescargasXml/ListaPartidas');
-        //    .then(() => {
-            
-        //})
-
+        
     }).catch(function (error) {
         console.log(error.response.data);
         $.unblockUI();
@@ -274,6 +273,8 @@ function resume(url, datos) {
     }
     else
     {
+
+
         $.blockUI({
             message: '<h1>Recopilando información...</h1>',
             css: {
