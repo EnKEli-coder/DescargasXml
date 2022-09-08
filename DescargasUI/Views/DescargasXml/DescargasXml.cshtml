@@ -37,7 +37,12 @@
                 </select>
                 <span id="span-orden" class="custom-arrow disabled" disabled><span class="fa-solid fa-angle-down fa-lg"></span></span>
             </div>
-            <button type="submit"  id="boton-descarga" class="btn-submit disabled" onclick="resume('@Url.Content("~/DescargasXml/Descargar")','@Url.Content("~/DescargasXml/Datos")')" >Descargar<i class="fa-solid fa-download"></i></button>
+            <h3>Seleccionar archivos</h3>
+            <div class="seleccion-docs">
+                <input type="checkbox" id="excelOption" value="Excel" class="doc-check disabled" disabled/><label>Excel</label>
+                <input type="checkbox" id="xmlOption" value="Xmls" class="doc-check disabled" onclick="activarCarpetas()" disabled/><label>Xml's</label>
+            </div>
+            <button type="submit" id="boton-descarga" class="btn-submit disabled" onclick="resume('@Url.Content("~/DescargasXml/Descargar")','@Url.Content("~/DescargasXml/Datos")')">Descargar<i class="fa-solid fa-download"></i></button>
         </div>
     </div>
     <div class="contenedor-archivos">
@@ -75,8 +80,3 @@
         </div>
     </div>
 </div>
-
-<script>
-
-    
-</script>

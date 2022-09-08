@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Datos;
 using System.Data.SqlClient;
+using Entidades.DTOs.DescargasXmlDTOs;
 using Entidades.DTOs;
 
 namespace Datos.ProductosNominaDB
@@ -149,12 +150,10 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-            public static List<XmlDTO> ObtenerXmls(int anio, int mes, string[] partidas)
+        public static List<XmlDTO> ObtenerXmls(int anio, int mes, string[] partidas)
         {
             try
             {
-                List<string> xmls = new List<string>();
-
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -183,30 +182,25 @@ namespace Datos.ProductosNominaDB
                     }
 
                     command.Connection = connection;
-                    command.CommandText = $"SELECT a.PARTIDA, tlx.Num, tlx.Rfc, tlx.numqna , tlx.Archivo , tlx.idXML , tlx.foliofiscal , tlx.contenidoXML FROM ProductosNomina.dbo.TBL_layoutXML tlx INNER JOIN Interfaces{anioInterfaz}.dbo.ACUM{anio} a ON a.FOLIOCFDI = tlx.folio where SUBSTRING(a.PARTIDA,1,6) in ("+listaPartidas+") and YEAR(tlx.FechaPago) = "+anio+" AND MONTH(tlx.FechaPago) = "+mes+ " AND tlx._Status = 'E' and SUBSTRING(Archivo,32,3) != 'VTE' order by a.PARTIDA";
+                    command.CommandText = $"SELECT a.PARTIDA , tlx.Archivo, tlx.ISR, tlx.Num, tlx.Rfc, tlx.contenidoXML FROM ProductosNomina.dbo.TBL_layoutXML tlx INNER JOIN Interfaces{anioInterfaz}.dbo.ACUM{anio} a ON a.FOLIOCFDI = tlx.folio where SUBSTRING(a.PARTIDA,1,6) in ("+listaPartidas+") and YEAR(tlx.FechaPago) = "+anio+" AND MONTH(tlx.FechaPago) = "+mes+ " AND tlx._Status = 'E' and SUBSTRING(Archivo,32,3) != 'VTE' order by a.PARTIDA";
 
                     SqlDataReader reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
                         string partida = reader[0].ToString();
-                        int num = Convert.ToInt32(reader[1]);
-                        string rfc = reader[2].ToString();
-                        int numQna = Convert.ToInt32(reader[3]);
-                        string archivo = reader[4].ToString();
-                        int idXml = Convert.ToInt32(reader[5]);
-                        string folioFiscal = reader[6].ToString();
-                        string contenidoXml = reader[7].ToString();
-
+                        string archivo = reader[1].ToString();
+                        int isr = Convert.ToInt32(reader[2]);
+                        int num = Convert.ToInt32(reader[3]);
+                        string rfc = reader[4].ToString();
+                        string contenidoXml = reader[5].ToString();
                         resultados.Add(new XmlDTO
                         {
                             partida = partida,
+                            archivo = archivo,
+                            isr = isr,
                             num = num,
                             rfc = rfc,
-                            numQna = numQna,
-                            archivo = archivo,
-                            idXml = idXml,
-                            folioFiscal = folioFiscal,
                             contenidoXml = contenidoXml
                         }); 
                     }
@@ -219,5 +213,85 @@ namespace Datos.ProductosNominaDB
             }
         }
 
+        public static List<XlsDTO> ObtenerXls(int anio, int mes, string[] partidas)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand();
+
+                    string listaPartidas = "";
+
+                    int i = 0;
+
+                    List<XlsDTO> resultados = new List<XlsDTO>();
+
+                    foreach (var partida in partidas)
+                    {
+                        if (i != 0)
+                        {
+                            listaPartidas += ",";
+                        }
+                        listaPartidas += "'" + partida + "'";
+                        i++;
+                    }
+
+                    string anioInterfaz = "";
+                    if (anio != DateTime.Now.Year)
+                    {
+                        anioInterfaz = "" + anio;
+                    }
+
+                    command.Connection = connection;
+                    command.CommandText = $"SELECT tlx.Archivo, tlx.ISR, tlx.Num, tlx.Rfc, tlx.numqna, tlx.foliofiscal, tlx.Sindicalizado, tlx.TipoContrato, tlx.NumSeguridadSocial, tlx.Curp, tlx.Departamento, tlx.Puesto, tlx.TipoJornada, tlx.TipoRegimen, tlx.contenidoXML FROM ProductosNomina.dbo.TBL_layoutXML tlx INNER JOIN Interfaces{anioInterfaz}.dbo.ACUM{anio} a ON a.FOLIOCFDI = tlx.folio where SUBSTRING(a.PARTIDA,1,6) in (" + listaPartidas + ") and YEAR(tlx.FechaPago) = " + anio + " AND MONTH(tlx.FechaPago) = " + mes + " AND tlx._Status = 'E' and SUBSTRING(Archivo,32,3) != 'VTE' order by a.PARTIDA";
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        string archivo = reader[0].ToString();
+                        int isr = Convert.ToInt32(reader[1]);
+                        int num = Convert.ToInt32(reader[2]);
+                        string rfc = reader[3].ToString();
+                        int numQna = Convert.ToInt32(reader[4]);
+                        string folioFiscal = reader[5].ToString();
+                        string sindicalizado = reader[6].ToString();
+                        int tipoContrato = Convert.ToInt32(reader[7]);
+                        string numeroSeguridadSocial = reader[8] == DBNull.Value ? "" : reader[8].ToString();
+                        string curp = reader[9].ToString();
+                        string departamento = reader[10].ToString();
+                        string puesto = reader[11].ToString();
+                        int tipoJornada = Convert.ToInt32(reader[12]);
+                        int tipoRegimen = Convert.ToInt32(reader[13]);
+                        string contenidoXml = reader[14].ToString();
+                        resultados.Add(new XlsDTO
+                        {
+                            archivo = archivo,
+                            isr = isr,
+                            num = num,
+                            rfc = rfc,
+                            numQna = numQna,
+                            folioFiscal = folioFiscal,
+                            sindicalizado = sindicalizado,
+                            tipoContrato = tipoContrato,
+                            numSeguridadSocial = numeroSeguridadSocial,
+                            curp = curp,
+                            departamento = departamento,
+                            puesto = puesto,
+                            tipoJornada = tipoJornada,
+                            tipoRegimen = tipoRegimen,
+                            contenidoXml = contenidoXml
+                        });
+                    }
+                    return resultados;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

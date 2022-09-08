@@ -50,6 +50,8 @@ function obtenerPartidas(url) {
     var carpetas = document.getElementById("orden");
     var spanCarpetas = document.getElementById("span-orden");
 
+    var docOptions = document.getElementsByClassName("doc-check");
+
     var checkAll = document.getElementById("container-mark-all");
     var lista = document.getElementById("lista-partidas");
     checkAll.style.display = "none";
@@ -122,9 +124,16 @@ function obtenerPartidas(url) {
             hidden.setAttribute("disabled", "");
             carpetas.add(hidden);
 
-            if (carpetas.hasAttribute("disabled")) {
-                carpetas.removeAttribute("disabled");
-                spanCarpetas.classList.remove("disabled");
+            carpetas.setAttribute("disabled", "");
+            spanCarpetas.classList.add("disabled");
+
+
+            for (let opcion of docOptions) {
+                if (opcion.hasAttribute("disabled")) {
+                    opcion.removeAttribute("disabled");
+                    opcion.classList.remove("disabled");
+                }
+                opcion.checked = false;
             }
             
         }
@@ -133,6 +142,122 @@ function obtenerPartidas(url) {
         console.log(error);
     });
 }
+
+
+function elegirDescarga() {
+    var excel = document.getElementById("excelOption");
+    var xml = document.getElementById("xmlOption");
+
+    if (excel.checked && xml.checked) {
+        descargarXls("/DescargasXml/DescargarXls");
+        descargar("/DescargasXml/Descargar");
+    } else if (excel.checked) {
+        descargarXls("/DescargasXml/DescargarXls");
+    } else {
+        descargar("/DescargasXml/Descargar");
+    }
+}
+
+function descargarXls(url) {
+
+    var xml = document.getElementById("xmlOption");
+    var anio = document.getElementById("anios").value;
+    var select = document.getElementById("meses");
+    var mes = select.value;
+    var nombreMes = select.options[select.selectedIndex].text.toLowerCase();
+    var partidas = document.getElementsByClassName("seleccion");
+    var lista = "";
+    var i = 0;
+
+    for (let partida of partidas) {
+        if (partida.checked) {
+
+            if (i != 0) {
+                lista += ",";
+            }
+            var valor = partida.nextElementSibling.innerHTML;
+            lista += valor;
+            i++;
+        }
+    }
+
+    if (mes == 0) {
+        nombreDescarga = 'Xmls_' + anio + '.xlsx';
+    } else {
+        nombreDescarga = 'Xmls_' + nombreMes + '_' + anio + '.xlsx';
+    }
+
+    if (!xml.checked) {
+        $.blockUI({
+            message: '<h1>Generando archivo...</h1>',
+            css: {
+                backgroundColor: '#A02141',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px'
+            }
+        });
+
+        axios.post(url,
+            {
+                anio: anio,
+                mes: mes,
+                partidas: lista,
+            },
+            {
+                responseType: 'arraybuffer'
+            }).then(function (response) {
+                $.unblockUI();
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', nombreDescarga);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Descarga completada',
+                    confirmButtonText: 'Aceptar',
+                    heightAuto: false,
+                    customClass: {
+                        popup: 'popupswal',
+                    }
+                })
+
+                obtenerMeses("/DescargasXml/DescargasXml");
+                obtenerPartidas('/DescargasXml/ListaPartidas');
+
+            }).catch(function (error) {
+                console.log(error.response.data);
+                $.unblockUI();
+            });
+    } else {
+        axios.post(url,
+            {
+                anio: anio,
+                mes: mes,
+                partidas: lista,
+            },
+            {
+                responseType: 'arraybuffer'
+            }).then(function (response) {
+                $.unblockUI();
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', nombreDescarga);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+            }).catch(function (error) {
+                console.log(error.response.data);
+            });
+    }
+}
+
 
 function descargar(url) {
 
@@ -195,7 +320,7 @@ function descargar(url) {
         anio: anio,
         mes: mes,
         partidas: lista,
-        carpetas: carpetas
+        carpetas: carpetas,
     },
     {
         responseType: 'arraybuffer'
@@ -239,6 +364,8 @@ function resume(url, datos) {
     var mesOption = meses.options[meses.selectedIndex].value;
     var orden = document.getElementById("orden");
     var disposicion = orden.options[orden.selectedIndex].value;
+    var excel = document.getElementById("excelOption");
+    var xml = document.getElementById("xmlOption");
     var ramos = document.getElementsByClassName("ramos");
     var seleccionados = 0;
 
@@ -248,23 +375,32 @@ function resume(url, datos) {
         }
     }
 
-    if (!(anioOption >= 0 && mesOption >= 0 && disposicion >= 0 && seleccionados > 0)) {
+    if (!((anioOption >= 0 && mesOption >= 0 && seleccionados > 0) && ((xml.checked && disposicion >= 0) || excel.checked))) {
 
         var iconAnio = anioOption >= 0 ? 'fa-check' : 'fa-xmark';
         var iconMes = mesOption >= 1 ? 'fa-check' : 'fa-xmark';
-        var iconOrden = disposicion >= 0 ? 'fa-check' : 'fa-xmark';
+        if (xml.checked) {
+            var iconOrden = disposicion >= 0 ? 'fa-check' : 'fa-xmark';
+        }
+        var iconDocumento = excel.checked || xml.checked ? 'fa-check' : 'fa-xmark';
         var iconPartidas = seleccionados > 0 ? 'fa-check' : 'fa-xmark';
 
         var listaAnio = '<i id="carga" class="fa-solid ' + iconAnio + '"></i>Año seleccionado';
         var listaMes = '<i id="carga" class="fa-solid ' + iconMes + '"></i>Mes seleccionado';
-        var listaOrden = '<i id="carga" class="fa-solid ' + iconOrden + '"></i>Disposición seleccionada';
+        if (xml.checked) {
+            var listaOrden = '<br><i id="carga" class="fa-solid ' + iconOrden + '"></i>Disposición seleccionada';
+        } else {
+            var listaOrden = ""
+        }
+        
+        var listaDocumento = '<i id="carga" class="fa-solid ' + iconDocumento + '"></i>Seleccionar archivos';
         var listaPartida = '<i id="carga" class="fa-solid ' + iconPartidas + '"></i>Partidas seleccionadas';
 
         Swal.fire({
             icon: 'warning',
             iconColor: '#A02141',
             title: 'Selecciona la información faltante',
-            html: listaAnio + "<br>" + listaMes + "<br>" + listaOrden + "<br>" + listaPartida,
+            html: listaAnio + "<br>" + listaMes + "<br>" + listaDocumento + listaOrden  +"<br>"+ listaPartida,
             heightAuto: false,
             customClass: {
                 popup: 'popupswal',
@@ -303,6 +439,15 @@ function resume(url, datos) {
             }
         }
 
+        var archivosADescargar = ""
+        if (excel.checked && xml.checked) {
+            archivosADescargar = "Se descargaran XMLs y Excel.";
+        } else if (excel.checked) {
+            archivosADescargar = "Se descargara un Excel.";
+        } else {
+            archivosADescargar = "Se descargaran XMLs.";
+        }
+
         axios.post(datos,
             {
                 anio: anio,
@@ -316,7 +461,7 @@ function resume(url, datos) {
 
                 Swal.fire({
                     title: 'Confirmar descarga',
-                    html: 'XMLs: ' + json[0] + " archivos.<br>ISR: " + monto + " MXN.",
+                    html: 'XMLs: ' + json[0] + " archivos.<br>ISR: " + monto + " MXN.<br>"+archivosADescargar,
                     icon: 'question',
                     iconColor: '#A02141',
                     confirmButtonText: 'Descargar',
@@ -328,7 +473,7 @@ function resume(url, datos) {
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        descargar(url)
+                        elegirDescarga();
                     }
                 })
             })
@@ -346,5 +491,19 @@ function activarBoton() {
 
     if (mes >= 0 && disposicion >= 0) {
         boton.classList.remove("disabled");
+    }
+}
+
+function activarCarpetas() {
+    var xml = document.getElementById("xmlOption");
+    var carpetas = document.getElementById("orden");
+    var spanCarpetas = document.getElementById("span-orden");
+
+    if (xml.checked) {
+        carpetas.removeAttribute("disabled");
+        spanCarpetas.classList.remove("disabled");
+    } else {
+        carpetas.setAttribute("disabled", "");
+        spanCarpetas.classList.add("disabled");
     }
 }

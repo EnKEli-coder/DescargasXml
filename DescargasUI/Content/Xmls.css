@@ -111,6 +111,25 @@ select {
     cursor: pointer;
 }
 
+.seleccion-docs{
+    display:flex;
+
+}
+
+.seleccion-docs > label{
+    margin: 0 0 0 4px;
+    font-size: 1.4em;
+}
+
+.seleccion-docs > input[type=checkbox] {
+    margin: 0;
+}
+
+.doc-check.disabled {
+    margin: 0;
+    border-color: rgb(160 33 65 / 0.35);
+}
+
 .custom-arrow {
     position: absolute;
     top: 0;
@@ -400,6 +419,21 @@ label {
     #container-mark-all{
         height: 4em;
         min-height: 4em;
+    }
+
+    .seleccion-docs > input[type=checkbox] {
+        height: 3em;
+        width: 3em;
+        min-height: 3em;
+        min-width: 3em;
+    }
+
+    .seleccion-docs > input[type=checkbox]::after {
+        font-size: 2.5em;
+    }
+
+    .seleccion-docs > label {
+        font-size: 2.4em;
     }
 
     #container-mark-all > label {

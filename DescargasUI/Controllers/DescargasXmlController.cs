@@ -55,6 +55,18 @@ namespace DescargasUI.Controllers
 
             return new ZipArchiveResult(archivos);
         }
+
+        [HttpPost]
+        public ActionResult DescargarXls(int anio, int mes, string partidas)
+        {
+
+            string[] lista = partidas.Split(',');
+            byte[] archivos;
+            
+            archivos = DescargasXmlNegocio.ObtenerXls(anio, mes, lista);
+            return File(archivos, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); ;
+        }
+
         [HttpPost]
         public ActionResult Datos(int anio, int mes, string partidas)
         {
