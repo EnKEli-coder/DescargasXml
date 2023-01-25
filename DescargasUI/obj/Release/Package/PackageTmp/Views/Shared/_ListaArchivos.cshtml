@@ -1,0 +1,21 @@
+﻿@{
+    Layout = null;
+}
+
+@model Entidades.Entidades.ArchivoLista[]
+
+@foreach (var archivo in Model)
+{
+    <div class="objeto-lista cargando" id="@archivo.id">
+        <div class="contenido">
+            <div class="detalles">
+                <span class="nombre">@archivo.nombre</span>
+            </div>
+        </div>
+        <i class="fa-solid fa-xmark quitar-elemento" onclick="eliminar(this)"></i>
+    </div>
+}
+
+
+
+

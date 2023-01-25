@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DescargasUI.Actions;
+using DescargasUI.Filters;
 using Entidades.DTOs;
 using Negocio;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ namespace DescargasUI.Controllers
 {
     public class DescargasXmlController : Controller
     {
+        [SessionSecurityFilter]
         public ActionResult DescargasXml()
         {
             List<int> Anios = DescargasXmlNegocio.ObtenerAniosXmls();
@@ -37,7 +39,7 @@ namespace DescargasUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Descargar(int anio, int mes, string partidas, int carpetas)
+        public ActionResult DescargarXml(int anio, int mes, string partidas, int carpetas)
         {
            
             string[] lista = partidas.Split(',');
@@ -63,8 +65,9 @@ namespace DescargasUI.Controllers
             string[] lista = partidas.Split(',');
             byte[] archivos;
             
-            archivos = DescargasXmlNegocio.ObtenerXls(anio, mes, lista);
-            return File(archivos, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); ;
+            archivos = DescargasXmlNegocio.ObtenerReportes(anio, mes, lista);
+            //return File(archivos, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); ;
+            return new ZipArchiveResult(archivos);
         }
 
         [HttpPost]
@@ -73,30 +76,9 @@ namespace DescargasUI.Controllers
 
             string[] lista = partidas.Split(',');
 
-            List<int> archivos = DescargasXmlNegocio.ObtenerTotal(anio, mes, lista);
+            List<Decimal> archivos = DescargasXmlNegocio.ObtenerTotal(anio, mes, lista);
 
             return Json(JsonConvert.SerializeObject(archivos));
         }
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
-        
     }
 }

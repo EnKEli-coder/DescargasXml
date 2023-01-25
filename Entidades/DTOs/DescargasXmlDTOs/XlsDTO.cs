@@ -8,20 +8,15 @@ namespace Entidades.DTOs.DescargasXmlDTOs
 {
     public class XlsDTO
     {
-        public string archivo { get; set; }
-        public int isr { get; set; }
-        public int num { get; set; }
+        public Decimal isr { get; set; }
+        public string num { get; set; }
         public string rfc { get; set; }
         public int numQna { get; set; }
         public string folioFiscal { get; set; }
-        public string sindicalizado { get; set; }
         public int tipoContrato { get; set; }
-        public string numSeguridadSocial { get; set; }
         public string curp { get; set; }
-        public char tipoNomina { get; set; }
+        public string tipoNomina { get; set; }
         public string departamento { get; set; }
-        public string puesto { get; set; }
-        public int tipoJornada { get; set; }
         public int tipoRegimen { get; set; }
         public string fechaPago { get; set; }
         public string fechaInicialPago { get; set; }

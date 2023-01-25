@@ -27,7 +27,10 @@ namespace DescargasUI
                        "~/Scripts/fontawesome.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/Xmls.css",
+                      "~/Content/DescargaXml.css",
+                      "~/Content/SubirXmls.css",
+                      "~/Content/HistorialCargas.css",
+                      //"~/Content/Xmls.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 

@@ -41,9 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\DescargasXmlDTOs\MacroDTO.cs" />
+    <Compile Include="DTOs\DescargasXmlDTOs\PartidaDTO.cs" />
+    <Compile Include="DTOs\DescargasXmlDTOs\ReporteAudiDTO.cs" />
     <Compile Include="DTOs\DescargasXmlDTOs\XlsDTO.cs" />
     <Compile Include="DTOs\DescargasXmlDTOs\XmlDTO.cs" />
+    <Compile Include="DTOs\SubirXmlsDTOs\ArchivoDTO.cs" />
+    <Compile Include="DTOs\SubirXmlsDTOs\Externo.cs" />
+    <Compile Include="DTOs\SubirXmlsDTOs\LoteRegistroDTO.cs" />
+    <Compile Include="Entidades\ArchivoLista.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

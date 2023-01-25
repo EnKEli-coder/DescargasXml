@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using DescargasUI.Models;
+using System.Web;
 using System.Web.Mvc;
 
 namespace DescargasUI
@@ -8,6 +9,7 @@ namespace DescargasUI
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new CustomExceptionFilter());
         }
     }
 }

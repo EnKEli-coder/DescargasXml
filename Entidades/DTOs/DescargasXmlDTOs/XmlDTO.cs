@@ -10,8 +10,8 @@ namespace Entidades.DTOs
     {
         public string partida { get; set; }
         public string archivo { get; set; }
-        public int isr { get; set; }
-        public int num { get; set; }
+        public Decimal isr { get; set; }
+        public string num { get; set; }
         public string rfc { get; set; }
         public int numQna { get; set; }
         public string folioFiscal { get; set; }

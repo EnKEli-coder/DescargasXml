@@ -1,0 +1,35 @@
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Negocio.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Negocio.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Datos.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Entidades.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\EPPlus.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Serilog.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Serilog.Sinks.File.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Datos.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Datos.dll.config
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Entidades.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Serilog.xml
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Serilog.Sinks.File.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\bin\Release\Serilog.Sinks.File.xml
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Release\Negocio.csproj.AssemblyReference.cache
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Release\Negocio.csproj.CoreCompileInputs.cache
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Release\Negocio.csproj.CopyComplete
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Release\Negocio.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Negocio\obj\Release\Negocio.pdb
+H:\DescargasUI\Negocio\bin\Release\Negocio.dll
+H:\DescargasUI\Negocio\bin\Release\Negocio.pdb
+H:\DescargasUI\Negocio\bin\Release\Datos.dll
+H:\DescargasUI\Negocio\bin\Release\Entidades.dll
+H:\DescargasUI\Negocio\bin\Release\Serilog.dll
+H:\DescargasUI\Negocio\bin\Release\Serilog.Sinks.File.dll
+H:\DescargasUI\Negocio\bin\Release\Datos.pdb
+H:\DescargasUI\Negocio\bin\Release\Datos.dll.config
+H:\DescargasUI\Negocio\bin\Release\Entidades.pdb
+H:\DescargasUI\Negocio\bin\Release\Serilog.xml
+H:\DescargasUI\Negocio\bin\Release\Serilog.Sinks.File.pdb
+H:\DescargasUI\Negocio\bin\Release\Serilog.Sinks.File.xml
+H:\DescargasUI\Negocio\obj\Release\Negocio.csproj.AssemblyReference.cache
+H:\DescargasUI\Negocio\obj\Release\Negocio.csproj.CoreCompileInputs.cache
+H:\DescargasUI\Negocio\obj\Release\Negocio.csproj.CopyComplete
+H:\DescargasUI\Negocio\obj\Release\Negocio.dll
+H:\DescargasUI\Negocio\obj\Release\Negocio.pdb

@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "Descargar Xml Externos";
+}
+<section class="contenedor" id="form-container">
+    <div class="title-container">
+        <span>Externos</span>
+    </div>
+    <div id="formulario">
+        <div class="input-container">
+            <label>Año</label>
+            <div class="select-container">
+                <select id="anios" onchange="obtenerMeses('@Url.Content("~/DescargasExternos/DescargasExternos")'), obtenerPartidas('@Url.Content("~/DescargasExternos/ListaPartidas")')">
+                    <option value="none" selected disabled hidden>Selecciona un año</option>
+                    @foreach (var anio in ViewBag.anios)
+                    {
+                        <option value="@anio">@anio</option>
+                    }
+                </select>
+                <span class="custom-arrow"><span class="fa-solid fa-angle-down fa-lg"></span></span>
+            </div>
+        </div>
+        <div class="input-container">
+            <label>Mes</label>
+            <div class="select-container">
+                <select id="meses" onchange="activarBoton()" disabled>
+                    <option value="none" selected disabled hidden>Escoge un mes</option>
+                </select>
+                <span id="span-meses" class="custom-arrow disabled"><span class="fa-solid fa-angle-down fa-lg"></span></span>
+            </div>
+        </div>
+        <div class="input-container">
+            <label>Estructura</label>
+            <div class="select-container">
+                <select id="orden" onchange="activarBoton()" disabled>
+                    <option value="none" selected disabled hidden>Escoge una opción</option>
+                    <option value="0">Carpeta única</option>
+                    <option value="1">Por carpetas</option>
+                </select>
+                <span id="span-orden" class="custom-arrow disabled"><span class="fa-solid fa-angle-down fa-lg"></span></span>
+            </div>
+        </div>
+        <div class="input-container">
+            <label>Archivo</label>
+            <div id="archivos-check-container">
+                <input type="checkbox" id="excelOption" value="Excel" class="doc-check disabled" disabled onchange="activarBoton()"/><label>Excel</label>
+                <input type="checkbox" id="xmlOption" value="Xmls" class="doc-check disabled" onclick="activarCarpetas(), activarBoton()" disabled /><label>Xml's</label>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="contenedor" id="search-container">
+    <div id="buscador">
+        <input type="text" id="input-busqueda" name="busqueda" placeholder="Buscar" disabled />
+        <button id="boton-busqueda" disabled><span class="fa-solid fa-magnifying-glass fa-lg"></span></button>
+    </div>
+</section>
+<section class="contenedor" id="partidas-container">
+    <div id="partidas-frame">
+        <div id="partidas-title-container">
+            <h3>Lista de partidas</h3>
+            <label>Marcar todos</label>
+            <input type="checkbox" id="check-all" onclick="checkAll(this)" />
+        </div>
+        <div id="linea-punteada">
+            <i id="carga" class="fas fa-circle-notch fa-spin"></i>
+            <label id="no-result">No hay resultados</label>
+            <ul class="xml-list" id="lista-partidas"></ul>
+        </div>
+    </div>
+    <div id="button-container">
+        <button type="submit" class="btn-submit disabled" id="boton-descarga" onclick="resume('@Url.Content("~/DescargasExternos/Datos")')">
+            Descargar<i class="fa-solid fa-download"></i>
+        </button>
+    </div>
+</section>
+<div id="modal-block">
+    <div class="error-modal" id="modal">
+        <div class="titulo-area">
+            <span id="titulo-modal"></span>
+            <i class="fa-solid fa-xmark" onclick="closeModal()"></i>
+        </div>
+        <div class="detalles-area">
+            <span id="texto-modal"></span>
+        </div>
+        <div class="btn-area">
+            <button class="btn-accept" id="btn-modal">Aceptar</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Scripts/App/DescargasExternos.js"></script>
+

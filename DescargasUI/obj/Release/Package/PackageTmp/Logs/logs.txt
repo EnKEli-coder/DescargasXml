@@ -1,0 +1,3 @@
+﻿2022-11-15 11:21:43.381 -06:00 [INF] Probando inicio
+2022-11-15 11:22:58.370 -06:00 [INF] Probando inicio
+2022-11-16 08:38:47.652 -06:00 [INF] Años obtenidos

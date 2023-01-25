@@ -1,0 +1,30 @@
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Datos.dll.config
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Datos.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Datos.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Entidades.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Serilog.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Serilog.Sinks.File.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Entidades.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Serilog.xml
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Serilog.Sinks.File.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Release\Serilog.Sinks.File.xml
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\obj\Release\Datos.csproj.AssemblyReference.cache
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\obj\Release\Datos.csproj.CoreCompileInputs.cache
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\obj\Release\Datos.csproj.CopyComplete
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\obj\Release\Datos.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\obj\Release\Datos.pdb
+H:\DescargasUI\Datos\bin\Release\Datos.dll.config
+H:\DescargasUI\Datos\bin\Release\Datos.dll
+H:\DescargasUI\Datos\bin\Release\Datos.pdb
+H:\DescargasUI\Datos\bin\Release\Entidades.dll
+H:\DescargasUI\Datos\bin\Release\Serilog.dll
+H:\DescargasUI\Datos\bin\Release\Serilog.Sinks.File.dll
+H:\DescargasUI\Datos\bin\Release\Entidades.pdb
+H:\DescargasUI\Datos\bin\Release\Serilog.xml
+H:\DescargasUI\Datos\bin\Release\Serilog.Sinks.File.pdb
+H:\DescargasUI\Datos\bin\Release\Serilog.Sinks.File.xml
+H:\DescargasUI\Datos\obj\Release\Datos.csproj.AssemblyReference.cache
+H:\DescargasUI\Datos\obj\Release\Datos.csproj.CoreCompileInputs.cache
+H:\DescargasUI\Datos\obj\Release\Datos.csproj.CopyComplete
+H:\DescargasUI\Datos\obj\Release\Datos.dll
+H:\DescargasUI\Datos\obj\Release\Datos.pdb

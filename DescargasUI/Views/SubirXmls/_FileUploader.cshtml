@@ -1,0 +1,45 @@
+﻿<div class="form-container">
+    <div class="controls">
+        <button id="btn-clear" onclick="limpiar()">
+            <span id="icon-refresh"><i class="fa-solid fa-arrows-rotate"></i></span>
+            Limpiar
+        </button>
+    </div>
+    <div class="select-form">
+        <div class="select-btn">
+            <div id="select-text"><span id="span-select">Selección unidad</span></div>
+            <span><i class="fa-solid fa-angle-down"></i></span>
+        </div>
+        <div class="select-content">
+            <div class="buscador">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="buscador-input" placeholder="Buscar" id="busqueda" />
+            </div>
+            <ul class="opciones" id="opciones">
+            </ul>
+        </div>
+    </div>
+    <div id="cantidad-container">
+        <span id="cantidad-archivos">0 archivos</span>
+    </div>
+</div>
+<div id="content-container">
+    <form action="#" method="post">
+        <input type="file" name="file-input" class="file-input" accept="text/xml" multiple />
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <p id="large-p">Suelta tus archivos u oprime para buscar</p>
+        <p id="small-p">Subir archivos</p>
+    </form>
+    <div id="queue-container">
+        <div id="lista-archivos">
+        </div>
+        <div id="cargar-mas">
+        </div>
+        <div id="loading-archivos">
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+</div>
+<div id="button-container">
+    <button class="btn-accept" id="btn-list" onclick="enviarArchivos()" disabled>Guardar</button>
+</div>

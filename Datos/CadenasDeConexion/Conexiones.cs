@@ -10,7 +10,7 @@ namespace Datos.CadenasDeConexion
     {
         public static string conexionPrueba()
         {
-            return @"Data Source=172.19.3.170; Initial Catalog=ProductosNomina; User id=invitado; Password=RH2022";
+            return @"Data Source=172.19.2.31; Initial Catalog=ProductosNomina; User id=ORomero; Password=Chocorrol2510@";
         }
     }
 }

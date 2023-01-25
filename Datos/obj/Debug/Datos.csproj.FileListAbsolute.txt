@@ -7,3 +7,24 @@ C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\obj\Debug\Datos.pdb
 C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Debug\Entidades.dll
 C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Debug\Entidades.pdb
 C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\obj\Debug\Datos.csproj.CopyComplete
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Debug\Datos.dll.config
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Debug\Serilog.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Debug\Serilog.Sinks.File.dll
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Debug\Serilog.xml
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Debug\Serilog.Sinks.File.pdb
+C:\Users\Recursos Humanos\source\repos\DescargasUI\Datos\bin\Debug\Serilog.Sinks.File.xml
+H:\DescargasUI\Datos\bin\Debug\Datos.dll.config
+H:\DescargasUI\Datos\bin\Debug\Datos.dll
+H:\DescargasUI\Datos\bin\Debug\Datos.pdb
+H:\DescargasUI\Datos\bin\Debug\Entidades.dll
+H:\DescargasUI\Datos\bin\Debug\Serilog.dll
+H:\DescargasUI\Datos\bin\Debug\Serilog.Sinks.File.dll
+H:\DescargasUI\Datos\bin\Debug\Entidades.pdb
+H:\DescargasUI\Datos\bin\Debug\Serilog.xml
+H:\DescargasUI\Datos\bin\Debug\Serilog.Sinks.File.pdb
+H:\DescargasUI\Datos\bin\Debug\Serilog.Sinks.File.xml
+H:\DescargasUI\Datos\obj\Debug\Datos.csproj.AssemblyReference.cache
+H:\DescargasUI\Datos\obj\Debug\Datos.csproj.CoreCompileInputs.cache
+H:\DescargasUI\Datos\obj\Debug\Datos.csproj.CopyComplete
+H:\DescargasUI\Datos\obj\Debug\Datos.dll
+H:\DescargasUI\Datos\obj\Debug\Datos.pdb

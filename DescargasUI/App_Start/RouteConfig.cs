@@ -16,7 +16,7 @@ namespace DescargasUI
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "DescargasXml", action = "DescargasXml", id = UrlParameter.Optional }
+                defaults: new { controller = "Validador", action = "InicioAplicacion", id = UrlParameter.Optional }
             );
         }
     }
