@@ -49,7 +49,7 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-        public static List<int> ObtenerMesesXmls(int anio)
+        public static async Task<List<int>> ObtenerMesesXmls(int anio)
         {
             try
             {
@@ -60,13 +60,13 @@ namespace Datos.ProductosNominaDB
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
 
                     SqlCommand command = new SqlCommand(query, connection);
 
                     command.CommandTimeout = 120;
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader =  await command.ExecuteReaderAsync();
 
                     while (reader.Read())
                     {
@@ -81,7 +81,7 @@ namespace Datos.ProductosNominaDB
                 throw;
             }
         }
-        public static List<PartidaDTO> ObtenerPartidas(int anio)
+        public static async Task<List<PartidaDTO>> ObtenerPartidas(int anio)
         {
             try
             {
@@ -101,13 +101,13 @@ namespace Datos.ProductosNominaDB
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
 
                     SqlCommand command = new SqlCommand(query, connection);
 
                     command.CommandTimeout = 300;
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     while (reader.Read())
                     {
@@ -167,7 +167,7 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-        public static List<Decimal> ObtenerTotal(int anio, string mes, string partidas)
+        public static async Task<List<Decimal>> ObtenerTotal(int anio, string mes, string partidas)
         {
             try
             {
@@ -175,7 +175,7 @@ namespace Datos.ProductosNominaDB
 
                 using(SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
                     SqlCommand command = new SqlCommand();
 
                     string anioInterfaz = "";
@@ -196,7 +196,7 @@ namespace Datos.ProductosNominaDB
 
                     command.CommandTimeout = 300;
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
                     
                     while (reader.Read())
                     {
@@ -213,13 +213,13 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-        public static List<XmlDTO> ObtenerXmls(int anio, int mes, string[] partidas)
+        public static async Task<List<XmlDTO>> ObtenerXmls(int anio, int mes, string[] partidas)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
                     SqlCommand command = new SqlCommand();
 
                     string listaPartidas = "";
@@ -257,7 +257,7 @@ namespace Datos.ProductosNominaDB
 
                     command.CommandTimeout = 600;
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     while (reader.Read())
                     {
@@ -286,13 +286,13 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-        public static List<MacroDTO> ObtenerDatosMacro(int anio, int mes, string[] partidas)
+        public static async Task<List<MacroDTO>> ObtenerDatosMacro(int anio, int mes, string[] partidas)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
                     SqlCommand command = new SqlCommand();
 
                     string listaPartidas = "";
@@ -331,7 +331,7 @@ namespace Datos.ProductosNominaDB
                         $"AND SUBSTRING(Archivo,32,3) != 'VTE' " +
                         $"ORDER BY a.PARTIDA";
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     while (reader.Read())
                     {
@@ -367,13 +367,13 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-        public static List<ReporteAudiDTO> ObtenerDatosAuditoria(int anio, int mes, string[] partidas)
+        public static async Task<List<ReporteAudiDTO>> ObtenerDatosAuditoria(int anio, int mes, string[] partidas)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
                     SqlCommand command = new SqlCommand();
 
                     string listaPartidas = "";
@@ -423,7 +423,7 @@ namespace Datos.ProductosNominaDB
                         $"group by SUBSTRING(a.partida, 1, 3), n.descrip " +
                         $"order by SUBSTRING(a.partida,1,3)";
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     while (reader.Read())
                     {

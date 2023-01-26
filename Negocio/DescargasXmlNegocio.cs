@@ -17,6 +17,7 @@ using Entidades.DTOs.DescargasXmlDTOs;
 using System.Web;
 using System.Drawing;
 using OfficeOpenXml.Style;
+using System.Diagnostics;
 
 namespace Negocio
 {
@@ -27,10 +28,10 @@ namespace Negocio
             return Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerAniosXmls();
         }
 
-        public static Dictionary<int, string> ObtenerMesesXmls(int anio)
+        public static async Task<Dictionary<int, string>> ObtenerMesesXmls(int anio)
         {
             //return Datos.ProductosNominaDB.ObtenerTransacciones.ObtenerMesesXmls(anio);
-            List<int> data = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerMesesXmls(anio);
+            List<int> data = await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerMesesXmls(anio);
 
             Dictionary<int, string> meses = new Dictionary<int, string>();
 
@@ -41,18 +42,18 @@ namespace Negocio
             return meses;
         }
 
-        public static Dictionary<string, List<string>> ObtenerPartidas(int anio)
+        public static async Task<Dictionary<string, List<string>>> ObtenerPartidas(int anio)
         {
-            List<PartidaDTO> partidas = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerPartidas(anio);
+            List<PartidaDTO> partidas = await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerPartidas(anio);
 
             Dictionary<string, List<string>> partidasPorUnidades = new Dictionary<string, List<string>>();
 
-            partidasPorUnidades = partidas.GroupBy(r => r.ramo+" "+r.nombreRamo).ToDictionary(ramo => ramo.Key, ramo => ramo.Select(part => part.partida+" "+part.nombrePartida).ToList());
+            partidasPorUnidades = partidas.GroupBy(r => r.ramo + " " + r.nombreRamo).ToDictionary(ramo => ramo.Key, ramo => ramo.Select(part => part.partida + " " + part.nombrePartida).ToList());
 
             return partidasPorUnidades;
         }
 
-        public static List<Decimal> ObtenerTotal(int anio, int mes, string[] partidas)
+        public static async Task<List<Decimal>> ObtenerTotal(int anio, int mes, string[] partidas)
         {
             string meses = "";
             string listaPartidas = "";
@@ -73,7 +74,7 @@ namespace Negocio
 
             if (mes == 0)
             {
-                List<int> data = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerMesesXmls(anio);
+                List<int> data =  await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerMesesXmls(anio);
 
                 foreach (var dato in data)
                 {
@@ -91,12 +92,12 @@ namespace Negocio
             }
 
 
-            return Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerTotal(anio, meses, listaPartidas);
+            return await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerTotal(anio, meses, listaPartidas);
         }
 
-        public static byte[] ObtenerXmls(int anio, int mes, string[] partidas, int carpetas)
+        public static async Task<byte[]> ObtenerXmls(int anio, int mes, string[] partidas, int carpetas)
         {
-            List<XmlDTO> xmls = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerXmls(anio, mes, partidas);
+            List<XmlDTO> xmls = await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerXmls(anio, mes, partidas);
 
             //crear carpeta(s)
 
@@ -176,9 +177,9 @@ namespace Negocio
             return arrayDeBytesZip;
         }
 
-        public static byte[] ObtenerXmlsAnio(int anio, string[] partidas, int carpetas)
+        public static async Task<byte[]> ObtenerXmlsAnio(int anio, string[] partidas, int carpetas)
         {
-            List<int> meses = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerMesesXmls(anio);
+            List<int> meses = await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerMesesXmls(anio);
             string raiz = @"C:\Reporte\";
             string carpetaDescargas;
 
@@ -189,7 +190,7 @@ namespace Negocio
 
                 foreach (int mes in meses)
                 {
-                    List<XmlDTO> xmls = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerXmls(anio, mes, partidas);
+                    List<XmlDTO> xmls = await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerXmls(anio, mes, partidas);
 
                     foreach (XmlDTO xml in xmls)
                     {
@@ -210,7 +211,7 @@ namespace Negocio
 
                 foreach (int mes in meses)
                 {
-                    List<XmlDTO> xmls = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerXmls(anio, mes, partidas);
+                    List<XmlDTO> xmls = await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerXmls(anio, mes, partidas);
 
                     //crear carpeta(s)
 
@@ -220,21 +221,21 @@ namespace Negocio
                     string carpetaMes = Path.Combine(carpetaDescargas, "XMLs_" + anio + "_" + nombreMes);
                     Directory.CreateDirectory(carpetaMes);
 
-                    var ramos = xmls.GroupBy(xml => xml.partida.Substring(0,3));
+                    var ramos = xmls.GroupBy(xml => xml.partida.Substring(0, 3));
 
-                    foreach(var ramo in ramos)
+                    foreach (var ramo in ramos)
                     {
                         string carpetaRamo = Path.Combine(carpetaMes, "Ramo_" + ramo.Key);
                         Directory.CreateDirectory(carpetaRamo);
 
                         var parts = ramo.GroupBy(part => part.partida);
 
-                        foreach(var part in parts)
+                        foreach (var part in parts)
                         {
                             string carpetaPartida = Path.Combine(carpetaRamo, "Partida_" + part.Key);
                             Directory.CreateDirectory(carpetaPartida);
 
-                            foreach(var xml in part)
+                            foreach (var xml in part)
                             {
                                 byte[] bytes = Encoding.Default.GetBytes(xml.contenidoXml);
                                 string xmlValue = Encoding.UTF8.GetString(bytes);
@@ -259,7 +260,7 @@ namespace Negocio
                     Directory.Delete(carpetaDescargas, true);
                 }
             }
-            
+
             var arrayDeBytesZip = File.ReadAllBytes(zip);
 
             if (File.Exists(zip))
@@ -270,7 +271,7 @@ namespace Negocio
             return arrayDeBytesZip;
         }
 
-        public static byte[] ObtenerReportes(int anio, int mesEscogido,string[] partidas)
+        public static async Task<byte[]> ObtenerReportes(int anio, int mesEscogido, string[] partidas)
         {
             string raiz = @"C:\Reporte\";
             string carpetaDescargas;
@@ -278,9 +279,14 @@ namespace Negocio
             carpetaDescargas = Path.Combine(raiz, "Reportes");
             Directory.CreateDirectory(carpetaDescargas);
 
-            byte[] macro = crearReporteMacro(anio, mesEscogido, partidas);
+            Task<byte[]> macroT = crearReporteMacro(anio, mesEscogido, partidas);
 
-            byte[] auditoria = crearReporteAuditoria(anio, mesEscogido, partidas);
+            Task<byte[]> auditoriaT =  crearReporteAuditoria(anio, mesEscogido, partidas);
+
+            byte[] macro = await macroT;
+            Debug.WriteLine("Termino macro");
+            byte[] auditoria = await auditoriaT;
+            Debug.WriteLine("Termino auditoria");
 
             string zip = carpetaDescargas + ".zip";
 
@@ -305,7 +311,7 @@ namespace Negocio
 
         public static List<MacroDTO> rellenarDatosXml(List<MacroDTO> xlss)
         {
-            foreach(MacroDTO row in xlss)
+            foreach (MacroDTO row in xlss)
             {
                 XmlDocument documento = new XmlDocument();
                 XmlNamespaceManager nm = new XmlNamespaceManager(documento.NameTable);
@@ -321,15 +327,15 @@ namespace Negocio
                 XmlNode deducciones = root.SelectSingleNode("/cfdi:Comprobante/cfdi:Complemento/nomina12:Nomina/nomina12:Deducciones", nm);
                 XmlNode otrosPagos = root.SelectSingleNode("/cfdi:Comprobante/cfdi:Complemento/nomina12:Nomina/nomina12:OtrosPagos", nm);
                 row.tipoNomina = node.Attributes["TipoNomina"] != null ? node.Attributes["TipoNomina"].Value : "";
-                if(row.tipoNomina == "O")
+                if (row.tipoNomina == "O")
                 {
                     row.tipoNomina = "NORMAL";
-                }else if(row.tipoNomina == "E")
+                } else if (row.tipoNomina == "E")
                 {
                     row.tipoNomina = "EXTRAORDINARIO";
                 }
                 row.fechaPago = node.Attributes["FechaPago"].Value;
-                if(deducciones != null)
+                if (deducciones != null)
                 {
                     XmlNode ajusteISR = root.SelectSingleNode("/cfdi:Comprobante/cfdi:Complemento/nomina12:Nomina/nomina12:Deducciones/nomina12:Deduccion[@Concepto = 'AJUSTE ISR']", nm);
 
@@ -413,18 +419,19 @@ namespace Negocio
             return arrayDeBytesZip;
         }
 
-        public static byte[] crearReporteMacro(int anio, int mesEscogido, string[] partidas)
+        public static async Task<byte[]> crearReporteMacro(int anio, int mesEscogido, string[] partidas)
         {
+            Debug.WriteLine("ReporteMacro");
             List<MacroDTO> depIsrList = new List<MacroDTO>();
 
             //Si mes = 0, obtener informacion de todo el año
             if (mesEscogido == 0)
             {
-                List<int> meses = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerMesesXmls(anio);
+                List<int> meses = await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerMesesXmls(anio);
 
                 foreach (int mes in meses)
                 {
-                    List<MacroDTO> info = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerDatosMacro(anio, mes, partidas);
+                    List<MacroDTO> info =  await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerDatosMacro(anio, mes, partidas);
 
                     info = rellenarDatosXml(info);
                     depIsrList.AddRange(info);
@@ -432,7 +439,7 @@ namespace Negocio
             }
             else
             {
-                List<MacroDTO> info = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerDatosMacro(anio, mesEscogido, partidas);
+                List<MacroDTO> info = await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerDatosMacro(anio, mesEscogido, partidas);
                 info = rellenarDatosXml(info);
                 depIsrList.AddRange(info);
             }
@@ -606,9 +613,10 @@ namespace Negocio
             return arrayDeBytes;
         }
 
-        public static byte[] crearReporteAuditoria(int anio, int mesEscogido, string[] partidas)
+        public static async Task<byte[]> crearReporteAuditoria(int anio, int mesEscogido, string[] partidas)
         {
-            List<ReporteAudiDTO> datos = Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerDatosAuditoria(anio, mesEscogido, partidas);
+            Debug.WriteLine("auditoria");
+            List<ReporteAudiDTO> datos =  await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerDatosAuditoria(anio, mesEscogido, partidas);
             
             var nuevo = @"C:\Reporte\Reportes\Auditoria.xlsx";
 
@@ -645,7 +653,7 @@ namespace Negocio
 
             excel.Save();
 
-            var arrayDeBytes = File.ReadAllBytes(nuevo);
+            byte[] arrayDeBytes =  File.ReadAllBytes(nuevo);
 
             //if (File.Exists(nuevo))
             //{
