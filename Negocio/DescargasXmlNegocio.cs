@@ -271,7 +271,7 @@ namespace Negocio
             return arrayDeBytesZip;
         }
 
-        public static async Task<byte[]> ObtenerReportes(int anio, int mesEscogido, string[] partidas)
+        public static async Task<byte[]> ObtenerReportes(int anio, int mesEscogido, string[] partidas, Boolean macro, Boolean audit)
         {
             string raiz = @"C:\Reporte\";
             string carpetaDescargas;
@@ -279,14 +279,17 @@ namespace Negocio
             carpetaDescargas = Path.Combine(raiz, "Reportes");
             Directory.CreateDirectory(carpetaDescargas);
 
-            Task<byte[]> macroT = crearReporteMacro(anio, mesEscogido, partidas);
+            if (macro)
+            {
+                Task<byte[]> macroT = crearReporteMacro(anio, mesEscogido, partidas);
+                byte[] macorReporte = await macroT;
+            }
 
-            Task<byte[]> auditoriaT =  crearReporteAuditoria(anio, mesEscogido, partidas);
-
-            byte[] macro = await macroT;
-            Debug.WriteLine("Termino macro");
-            byte[] auditoria = await auditoriaT;
-            Debug.WriteLine("Termino auditoria");
+            if (audit)
+            {
+                Task<byte[]> auditoriaT = crearReporteAuditoria(anio, mesEscogido, partidas);
+                byte[] auditoria = await auditoriaT;
+            }
 
             string zip = carpetaDescargas + ".zip";
 
@@ -421,7 +424,6 @@ namespace Negocio
 
         public static async Task<byte[]> crearReporteMacro(int anio, int mesEscogido, string[] partidas)
         {
-            Debug.WriteLine("ReporteMacro");
             List<MacroDTO> depIsrList = new List<MacroDTO>();
 
             //Si mes = 0, obtener informacion de todo el año
@@ -615,7 +617,6 @@ namespace Negocio
 
         public static async Task<byte[]> crearReporteAuditoria(int anio, int mesEscogido, string[] partidas)
         {
-            Debug.WriteLine("auditoria");
             List<ReporteAudiDTO> datos =  await Datos.ProductosNominaDB.DescargasXmlDatos.ObtenerDatosAuditoria(anio, mesEscogido, partidas);
             
             var nuevo = @"C:\Reporte\Reportes\Auditoria.xlsx";
@@ -654,12 +655,6 @@ namespace Negocio
             excel.Save();
 
             byte[] arrayDeBytes =  File.ReadAllBytes(nuevo);
-
-            //if (File.Exists(nuevo))
-            //{
-            //    File.Delete(nuevo);
-            //}
-
             return arrayDeBytes;
         }
 

@@ -11,12 +11,29 @@ var listaUniverso;
 var delayTimer;
 var modal = document.getElementById("modal");
 var modalBlock = document.getElementById("modal-block");
+var html = document.body.parentNode;
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded",function () {
     var barraBusqueda = document.getElementById("input-busqueda");
     barraBusqueda.addEventListener('input', busqueda);
     var botonBuscar = document.getElementById("boton-busqueda");
     botonBuscar.addEventListener('click', busqueda);
+})
+
+//$(window).click(function () {
+//    var select = document.getElementById("select-archivos");
+//    if (select.classList.contains("active")) {
+//        select.classList.toggle("active");
+//    }
+//})
+
+html.addEventListener('click', function (event) {
+    var select = document.getElementById("select-archivos");
+    if (!select.contains(event.target)) {
+        if (select.classList.contains("active")) {
+            select.classList.toggle("active");
+        }
+    }
 })
 
 /**
@@ -272,6 +289,12 @@ function busqueda() {
     }, 100)
 }
 
+function abrirSelectArchivos() {
+    event.stopPropagation()
+    var select = document.getElementById("select-archivos");
+    select.classList.toggle("active");
+}
+
 /**
  * Muestra en un modal, la cantidad de archivos a descargar, el isr total de los Xml, los
  * archivos que se descargaran: xmls, xls o ambos, y un boton de confirmacion. Se muestra 
@@ -286,7 +309,8 @@ function resume(datos) {
     var mesOption = meses.options[meses.selectedIndex].value;
     var orden = document.getElementById("orden");
     var disposicion = orden.options[orden.selectedIndex].value;
-    var excel = document.getElementById("excelOption");
+    var macro = document.getElementById("macroOption");
+    var audit = document.getElementById("auditOption");
     var xml = document.getElementById("xmlOption");
     var ramos = document.getElementsByClassName("ramos");
     var seleccionados = 0;
@@ -297,14 +321,14 @@ function resume(datos) {
         }
     }
 
-    if (!((anioOption >= 0 && mesOption >= 0 && seleccionados > 0) && ((xml.checked && disposicion >= 0) || excel.checked))) {
+    if (!((anioOption >= 0 && mesOption >= 0 && seleccionados > 0) && ((xml.checked && disposicion >= 0) || macro.checked || audit.checked))) {
 
         var iconAnio = anioOption >= 0 ? 'fa-check' : 'fa-xmark';
         var iconMes = mesOption >= 1 ? 'fa-check' : 'fa-xmark';
         if (xml.checked) {
             var iconOrden = disposicion >= 0 ? 'fa-check' : 'fa-xmark';
         }
-        var iconDocumento = excel.checked || xml.checked ? 'fa-check' : 'fa-xmark';
+        var iconDocumento = macro.checked || xml.checked || audit.checked ? 'fa-check' : 'fa-xmark';
         var iconPartidas = seleccionados > 0 ? 'fa-check' : 'fa-xmark';
 
         var listaAnio = '<i id="carga" class="fa-solid ' + iconAnio + '"></i>Año seleccionado';
@@ -361,12 +385,12 @@ function resume(datos) {
         }
 
         var archivosADescargar = ""
-        if (excel.checked && xml.checked) {
-            archivosADescargar = "Se descargarán XMLs y Excel.";
-        } else if (excel.checked) {
-            archivosADescargar = "Se descargará un Excel.";
+        if (macro.checked || audit.checked  && xml.checked) {
+            archivosADescargar = "Se descargará Reportes y XML.";
+        } else if (macro.checked || audit.checked) {
+            archivosADescargar = "Se descargará Reportes.";
         } else {
-            archivosADescargar = "Se descargaran XMLs.";
+            archivosADescargar = "Se descargará XML.";
         }
 
         axios.post(datos,
@@ -413,8 +437,9 @@ function resume(datos) {
  * usuario eligiera para la descarga.
  */
 async function elegirDescarga() {
-    var excel = document.getElementById("excelOption");
+    var macro = document.getElementById("macroOption");
     var xml = document.getElementById("xmlOption");
+    var auditoria = document.getElementById("auditOption");
 
     $.blockUI({
         message: '<h1>Comprimiendo archivos...</h1>',
@@ -426,10 +451,10 @@ async function elegirDescarga() {
         }
     });
 
-    if (excel.checked && xml.checked) {
+    if ((macro.checked || auditoria.checked) && xml.checked) {
        await descargarXls("/DescargasXml/DescargarXls");
        await descargarXml("/DescargasXml/DescargarXml");
-    } else if (excel.checked) {
+    } else if (macro.checked || auditoria.checked) {
         await descargarXls("/DescargasXml/DescargarXls");
     } else {
        await descargarXml("/DescargasXml/DescargarXml");
@@ -457,6 +482,8 @@ async function elegirDescarga() {
  */
 async function descargarXls(controlador) {
 
+    var macro = document.getElementById("macroOption").checked;
+    var audit = document.getElementById("auditOption").checked;
     var anio = document.getElementById("anios").value;
     var select = document.getElementById("meses");
     var mes = select.value;
@@ -488,7 +515,9 @@ async function descargarXls(controlador) {
             {
                 anio: anio,
                 mes: mes,
-                partidas: lista
+                partidas: lista,
+                macro: macro,
+                audit: audit
             },
             {
                 responseType: 'arraybuffer'
@@ -592,13 +621,14 @@ function activarBoton() {
     var orden = document.getElementById("orden");
     var disposicion = orden.options[orden.selectedIndex].value;
     var boton = document.getElementById("boton-descarga");
-    var excel = document.getElementById("excelOption");
+    var macro = document.getElementById("macroOption");
+    var audit = document.getElementById("auditOption")
     var xml = document.getElementById("xmlOption");
 
     if (mes >= 0) {
         if (xml.checked) {
             disposicion >= 0 ? boton.classList.remove("disabled") : boton.classList.add("disabled")
-        } else if (excel.checked) {
+        } else if (macro.checked || audit.checked) {
             boton.classList.remove("disabled")
         } else {
             boton.classList.add("disabled")

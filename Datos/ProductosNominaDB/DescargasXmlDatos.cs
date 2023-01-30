@@ -81,6 +81,7 @@ namespace Datos.ProductosNominaDB
                 throw;
             }
         }
+
         public static async Task<List<PartidaDTO>> ObtenerPartidas(int anio)
         {
             try

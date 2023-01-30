@@ -60,12 +60,12 @@ namespace DescargasUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> DescargarXls(int anio, int mes, string partidas)
+        public async Task<ActionResult> DescargarXls(int anio, int mes, string partidas, Boolean macro, Boolean audit)
         {
             string[] lista = partidas.Split(',');
             byte[] archivos;
             
-            archivos = await DescargasXmlNegocio.ObtenerReportes(anio, mes, lista);
+            archivos = await DescargasXmlNegocio.ObtenerReportes(anio, mes, lista, macro, audit);
             //return File(archivos, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); ;
             return new ZipArchiveResult(archivos);
         }

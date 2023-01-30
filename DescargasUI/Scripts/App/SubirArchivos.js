@@ -40,7 +40,7 @@ var paginadoLista = 0;
 /**
  * Se ejecuta al inicio y renderiza el modulo por defecto.
  */
-$(document).ready(
+document.addEventListener('DOMContentLoaded',
     renderModulo);
 
 /** Obtiene la lista de unidades y ramos.*/

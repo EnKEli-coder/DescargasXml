@@ -45,7 +45,7 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-        public static List<int> ObtenerMesesXmls(int anio)
+        public static async Task<List<int>> ObtenerMesesXmls(int anio)
         {
             List<int> meses = new List<int>();
 
@@ -56,13 +56,13 @@ namespace Datos.ProductosNominaDB
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
 
                     SqlCommand command = new SqlCommand(query, connection);
 
                     command.CommandTimeout = 120;
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     while (reader.Read())
                     {
@@ -78,7 +78,7 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-        public static List<PartidaDTO> ObtenerPartidas(int anio)
+        public static async Task<List<PartidaDTO>> ObtenerPartidas(int anio)
         {
             List<PartidaDTO> partidas = new List<PartidaDTO>();
 
@@ -91,13 +91,13 @@ namespace Datos.ProductosNominaDB
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
 
                     SqlCommand command = new SqlCommand(query, connection);
 
                     command.CommandTimeout = 300;
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     while (reader.Read())
                     {
@@ -171,7 +171,7 @@ namespace Datos.ProductosNominaDB
             }
         }
 
-        public static List<XmlDTO> ObtenerXmls(int anio, int mes, string[] partidas)
+        public static async Task<List<XmlDTO>> ObtenerXmls(int anio, int mes, string[] partidas)
         {
             List<XmlDTO> resultados = new List<XmlDTO>();
 
@@ -179,7 +179,7 @@ namespace Datos.ProductosNominaDB
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
+                    await connection.OpenAsync();
                     SqlCommand command = new SqlCommand();
 
                     string listaPartidas = "";
@@ -214,7 +214,7 @@ namespace Datos.ProductosNominaDB
 
                     command.CommandTimeout = 300;
 
-                    SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     while (reader.Read())
                     {
@@ -322,5 +322,85 @@ namespace Datos.ProductosNominaDB
             }
         }
 
+        public static async Task<List<MacroDTO>> ObtenerDatosMacro(int anio, int mes, string[] partidas)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+                    SqlCommand command = new SqlCommand();
+
+                    string listaPartidas = "";
+
+                    int i = 0;
+
+                    List<MacroDTO> resultados = new List<MacroDTO>();
+
+                    foreach (var partida in partidas)
+                    {
+                        if (i != 0)
+                        {
+                            listaPartidas += ",";
+                        }
+                        listaPartidas += "'" + partida + "'";
+                        i++;
+                    }
+
+                    string anioInterfaz = "";
+                    if (anio != DateTime.Now.Year)
+                    {
+                        anioInterfaz = "" + anio;
+                    }
+
+                    command.CommandTimeout = 300;
+                    command.Connection = connection;
+                    command.CommandText = $"SELECT SUBSTRING(a.PARTIDA,1,3) AS ramo, n.descrip, p.Departamento , p.numqna, p.foliofiscal, p.Rfc, p.TipoRegimen, p.ISR, p.contenidoXML " +
+                        $"FROM ProductosNomina.dbo.TBL_layoutXML p INNER JOIN Interfaces{anioInterfaz}.dbo.ACUM{anio} a " +
+                        $"ON p.folio = a.FOLIOCFDI " +
+                        $"LEFT JOIN nomina.dbo.nom_cat_a_part_{anio} n ON SUBSTRING(p.departamento, 1, 2) COLLATE MODERN_SPANISH_CI_AS = n.PART " +
+                        $"WHERE SUBSTRING(a.PARTIDA,1,6) IN (" + listaPartidas + ") " +
+                        $"AND YEAR(p.FechaPago) = " + anio + " " +
+                        $"AND MONTH(p.FechaPago) = " + mes + " " +
+                        $"AND a.NOMINA_F <> '03' " +
+                        $"AND p._Status = 'E' " +
+                        $"AND SUBSTRING(Archivo,32,3) != 'VTE' " +
+                        $"ORDER BY a.PARTIDA";
+
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                    while (reader.Read())
+                    {
+                        string ramo = reader[0].ToString();
+                        string nombreRamo = reader[1].ToString();
+                        string departamento = reader[2].ToString();
+                        int numQna = Convert.ToInt32(reader[3]);
+                        string folioFiscal = reader[4].ToString();
+                        string rfc = reader[5].ToString();
+                        int tipoRegimen = Convert.ToInt32(reader[6]);
+                        decimal isr = Convert.ToDecimal(reader[7]);
+                        string contenidoXml = reader[8].ToString();
+
+                        resultados.Add(new MacroDTO
+                        {
+                            ramo = "00" + ramo.Substring(0, 1) + "-" + ramo.Substring(1, 2),
+                            nombreRamo = nombreRamo,
+                            Dependencia = departamento,
+                            numQna = numQna,
+                            folioFiscal = folioFiscal,
+                            rfc = rfc,
+                            tipoRegimen = tipoRegimen,
+                            isr = isr,
+                            contenidoXml = contenidoXml
+                        });
+                    }
+                    return resultados;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

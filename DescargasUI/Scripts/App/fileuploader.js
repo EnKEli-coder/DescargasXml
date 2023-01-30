@@ -3,7 +3,7 @@ var uploadObj;
 var files = [];
 
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded',function () {
 	uploadObj = $("#fileuploader").uploadFile({
 		url: "/subirXmls/GuardarRegistro",
 		fileName: "file",

@@ -12,7 +12,7 @@ var modal = document.getElementById("modal");
 var modalBlock = document.getElementById("modal-block");
 var delayTimer;
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded',function () {
     var barraBusqueda = document.getElementById("input-busqueda");
     barraBusqueda.addEventListener('input', busqueda);
     var botonBuscar = document.getElementById("boton-busqueda");
@@ -278,27 +278,49 @@ function busqueda() {
  * Ejecuta las funciones de descargarXls y descargarXml, de acuerdo a los archivos que el
  * usuario eligiera para la descarga.
  */
-function elegirDescarga() {
+async function elegirDescarga() {
     var excel = document.getElementById("excelOption");
     var xml = document.getElementById("xmlOption");
 
+    $.blockUI({
+        message: '<h1>Comprimiendo archivos...</h1>',
+        css: {
+            backgroundColor: '#A02141',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '8px'
+        }
+    })
+
     if (excel.checked && xml.checked) {
-        descargarXls("/DescargasExternos/DescargarXls");
-        descargarXml("/DescargasExternos/DescargarXml");
+        await descargarXls("/DescargasExternos/DescargarXls");
+        await descargarXml("/DescargasExternos/DescargarXml");
     } else if (excel.checked) {
-        descargarXls("/DescargasExternos/DescargarXls");
+        await descargarXls("/DescargasExternos/DescargarXls");
     } else {
-        descargarXml("/DescargasExternos/DescargarXml");
+        await descargarXml("/DescargasExternos/DescargarXml");
     }
+    $.unblockUI();
+    Swal.fire({
+        icon: 'success',
+        title: 'Descarga completada',
+        confirmButtonText: 'Aceptar',
+        heightAuto: false,
+        customClass: {
+            popup: 'popupswal',
+        }
+    })
+
+    obtenerMeses("/DescargasExternos/DescargasExternos");
+    obtenerPartidas('/DescargasExternos/ListaPartidas');
 }
 
 /**
  * Descarga un archivo Xls con los datos de los archivos de los ramos y partidas seleccionadas.
- * @param {string} url - ruta al controlador ~/DescargasExternosController/DescargarXls(int anio, int mes, string partidas).
+ * @param {string} controlador - ruta al controlador ~/DescargasExternosController/DescargarXls(int anio, int mes, string partidas).
  */
-function descargarXls(url) {
+async function descargarXls(controlador) {
 
-    var xml = document.getElementById("xmlOption");
     var anio = document.getElementById("anios").value;
     var select = document.getElementById("meses");
     var mes = select.value;
@@ -320,87 +342,38 @@ function descargarXls(url) {
     }
 
     if (mes == 0) {
-        nombreDescarga = 'Xmls_' + anio + '.xlsx';
+        nombreDescarga = 'Reportes_' + anio + '.zip';
     } else {
-        nombreDescarga = 'Xmls_' + nombreMes + '_' + anio + '.xlsx';
+        nombreDescarga = 'Reportes_' + nombreMes + '_' + anio + '.zip';
     }
-
-    if (!xml.checked) {
-        $.blockUI({
-            message: '<h1>Generando archivo...</h1>',
-            css: {
-                backgroundColor: '#A02141',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '8px'
-            }
-        });
-
-        axios.post(url, {
-                anio: anio,
-                mes: mes,
-                partidas: lista,
+    try {
+        const res = await axios.post(controlador, {
+            anio: anio,
+            mes: mes,
+            partidas: lista,
         }, {
             responseType: 'arraybuffer',
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        }).then(function (response) {
-            $.unblockUI();
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', nombreDescarga);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Descarga completada',
-                confirmButtonText: 'Aceptar',
-                heightAuto: false,
-                customClass: {
-                    popup: 'popupswal',
-                }
-            })
-
-            obtenerMeses("/DescargasExternos/DescargasExternos");
-            obtenerPartidas('/DescargasExternos/ListaPartidas');
-
-        }).catch(function (error) {
-            $.unblockUI();
-            openModal("Error", "Ha ocurrido un error, intente de nuevo mas tarde.", "closeModal()");
         });
-    } else {
-        axios.post(url,
-            {
-                anio: anio,
-                mes: mes,
-                partidas: lista,
-            },
-            {
-                responseType: 'arraybuffer'
-            }).then(function (response) {
-                $.unblockUI();
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', nombreDescarga);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
 
-            }).catch(function (error) {
-                $.unblockUI();
-                openModal("Error", "Ha ocurrido un error, intente de nuevo mas tarde.", "closeModal()");
-            });
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', nombreDescarga);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch(error) {
+        $.unblockUI();
+        openModal("Error", "Ha ocurrido un error, intente de nuevo mas tarde.", "closeModal()");
     }
 }
 
 /**
  * Descarga un archivo comprimido con los xml de los ramos y partidas seleccionadas.
- * @param {string} url - ruta al controlador ~/DescargasExternosController/DescargarXml(int anio, int mes, string partidas, int carpetas).
+ * @param {string} controlador - ruta al controlador ~/DescargasExternosController/DescargarXml(int anio, int mes, string partidas, int carpetas).
  */
-function descargarXml(url) {
+async function descargarXml(controlador) {
 
     var nombreCarpeta;
     var nombreDescarga;
@@ -446,52 +419,29 @@ function descargarXml(url) {
             i++;
         }
     }
-    $.blockUI({
-        message: '<h1>Comprimiendo archivos...</h1>',
-        css: {
-            backgroundColor: '#A02141',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px'
-        }
-    })
 
-    axios.post(url, {
-        anio: anio,
-        mes: mes,
-        partidas: lista,
-        carpetas: carpetas,
-    },
-    {
-        responseType: 'arraybuffer',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    }).then(function (response) {
-        $.unblockUI();
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+    try {
+        const res = await axios.post(controlador, {
+            anio: anio,
+            mes: mes,
+            partidas: lista,
+            carpetas: carpetas,
+        }, {
+            responseType: 'arraybuffer',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', nombreDescarga);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Descarga completada',
-            confirmButtonText: 'Aceptar',
-            heightAuto: false,
-            customClass: {
-                popup: 'popupswal',
-            }
-        })
-
-        obtenerMeses("/DescargasExternos/DescargasExternos");
-        obtenerPartidas('/DescargasExternos/ListaPartidas');
-
-    }).catch(function (error) {
+    } catch (error) {
         $.unblockUI();
         openModal("Error", "Ha ocurrido un error, intente de nuevo mas tarde.", "closeModal()");
-    });
+    }
 }
 
 /**

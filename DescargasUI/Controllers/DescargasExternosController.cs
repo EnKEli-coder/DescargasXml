@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Negocio;
 using DescargasUI.Filters;
+using System.Threading.Tasks;
 
 namespace DescargasUI.Controllers
 {
@@ -21,24 +22,24 @@ namespace DescargasUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult DescargasExternos(int anioSelect)
+        public async Task<ActionResult> DescargasExternos(int anioSelect)
         {
             //Console.WriteLine(anioSelect);
-            Dictionary<int, string> meses = DescargasExternosNegocio.ObtenerMesesXmls(anioSelect);
+            Dictionary<int, string> meses = await DescargasExternosNegocio.ObtenerMesesXmls(anioSelect);
 
             return Json(JsonConvert.SerializeObject(meses));
         }
 
         [HttpPost]
-        public ActionResult ListaPartidas(int anioSelect)
+        public async Task<ActionResult> ListaPartidas(int anioSelect)
         {
-            Dictionary<string, List<string>> ramos = DescargasExternosNegocio.ObtenerPartidas(anioSelect);
+            Dictionary<string, List<string>> ramos = await DescargasExternosNegocio.ObtenerPartidas(anioSelect);
 
             return Json(JsonConvert.SerializeObject(ramos));
         }
 
         [HttpPost]
-        public ActionResult DescargarXml(int anio, int mes, string partidas, int carpetas)
+        public async Task<ActionResult> DescargarXml(int anio, int mes, string partidas, int carpetas)
         {
 
             string[] lista = partidas.Split(',');
@@ -46,11 +47,11 @@ namespace DescargasUI.Controllers
 
             if (mes == 0)
             {
-                archivos = DescargasExternosNegocio.ObtenerXmlsAnio(anio, lista, carpetas);
+                archivos = await DescargasExternosNegocio.ObtenerXmlsAnio(anio, lista, carpetas);
             }
             else
             {
-                archivos = DescargasExternosNegocio.ObtenerXmls(anio, mes, lista, carpetas);
+                archivos = await DescargasExternosNegocio.ObtenerXmls(anio, mes, lista, carpetas);
             }
 
 
@@ -58,23 +59,23 @@ namespace DescargasUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult DescargarXls(int anio, int mes, string partidas)
+        public async Task<ActionResult> DescargarXls(int anio, int mes, string partidas)
         {
 
             string[] lista = partidas.Split(',');
             byte[] archivos;
 
-            archivos = DescargasExternosNegocio.ObtenerXls(anio, mes, lista);
+            archivos = await DescargasExternosNegocio.ObtenerReportes(anio, mes, lista);
             return File(archivos, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); ;
         }
 
         [HttpPost]
-        public ActionResult Datos(int anio, int mes, string partidas)
+        public async Task<ActionResult> Datos(int anio, int mes, string partidas)
         {
 
             string[] lista = partidas.Split(',');
 
-            List<Decimal> archivos = DescargasExternosNegocio.ObtenerTotal(anio, mes, lista);
+            List<Decimal> archivos = await DescargasExternosNegocio.ObtenerTotal(anio, mes, lista);
 
             return Json(JsonConvert.SerializeObject(archivos));
         }
