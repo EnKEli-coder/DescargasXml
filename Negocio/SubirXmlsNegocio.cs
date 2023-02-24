@@ -76,12 +76,12 @@ namespace Negocio
                     row.TotalDeducciones = Convert.ToDecimal(nomina.Attributes["TotalDeducciones"] != null ? nomina.Attributes["TotalDeducciones"].Value : null);
                     row.TotalOtrosPagos = Convert.ToDecimal(nomina.Attributes["TotalOtrosPagos"] != null ? nomina.Attributes["TotalOtrosPagos"].Value : null);
 
-                    string fechaQna = nomina.Attributes["FechaInicialPago"] != null ? nomina.Attributes["FechaInicialPago"].Value : null;
+                    string fechaQna = nomina.Attributes["FechaPago"] != null ? nomina.Attributes["FechaPago"].Value : null;
                     string año = fechaQna.Substring(2, 2);
                     int dia = Convert.ToInt32(fechaQna.Substring(8, 2));
                     int quincena = Convert.ToInt32(fechaQna.Substring(5, 2))*2;
 
-                    if(dia == 1)
+                    if(dia < 28)
                     {
                         quincena--;
 

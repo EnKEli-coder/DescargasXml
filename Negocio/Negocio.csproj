@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="DescargasExternosNegocio.cs" />
     <Compile Include="DescargasXmlNegocio.cs" />
+    <Compile Include="NetworkShare.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubirXmlsNegocio.cs" />
   </ItemGroup>

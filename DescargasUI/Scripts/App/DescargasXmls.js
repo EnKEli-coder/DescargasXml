@@ -20,13 +20,6 @@ document.addEventListener("DOMContentLoaded",function () {
     botonBuscar.addEventListener('click', busqueda);
 })
 
-//$(window).click(function () {
-//    var select = document.getElementById("select-archivos");
-//    if (select.classList.contains("active")) {
-//        select.classList.toggle("active");
-//    }
-//})
-
 html.addEventListener('click', function (event) {
     var select = document.getElementById("select-archivos");
     if (!select.contains(event.target)) {
@@ -94,8 +87,10 @@ async function obtenerPartidas(url) {
     var boton = document.getElementById("boton-descarga");
     var carpetas = document.getElementById("orden");
     var spanCarpetas = document.getElementById("span-orden");
-
     var docOptions = document.getElementsByClassName("doc-check");
+    var selectArchivos = document.getElementById("div-select-btn");
+    var spanArchivos = document.getElementById("span-archivos");
+    var checkCfdi = document.getElementById("pdfOption");
 
     //var checkAll = document.getElementById("container-mark-all");
     var lista = document.getElementById("lista-partidas");
@@ -103,6 +98,8 @@ async function obtenerPartidas(url) {
     lista.style.display = "none";
     buscar.setAttribute("disabled", "");
     botonBuscar.setAttribute("disabled", "");
+    selectArchivos.classList.remove("active");
+    checkCfdi.setAttribute("disabled", "");
 
     var cargando = document.getElementById("carga");
     cargando.style.display = "inline-block";
@@ -175,17 +172,22 @@ async function obtenerPartidas(url) {
             hidden.setAttribute("disabled", "");
             carpetas.add(hidden);
 
+            spanArchivos.classList.remove("disabled");
+
             carpetas.setAttribute("disabled", "");
             spanCarpetas.classList.add("disabled");
+
+            selectArchivos.classList.add("active");
+            if (parseInt(anio) == 2021 || parseInt(anio) == 2022) {
+                checkCfdi.removeAttribute("disabled", "");
+            }
+
             buscar.removeAttribute("disabled", "");
             botonBuscar.removeAttribute("disabled", "");
+
             todos.checked = false;
 
             for (let opcion of docOptions) {
-                if (opcion.hasAttribute("disabled")) {
-                    opcion.removeAttribute("disabled");
-                    opcion.classList.remove("disabled");
-                }
                 opcion.checked = false;
             }
 
@@ -289,10 +291,12 @@ function busqueda() {
     }, 100)
 }
 
-function abrirSelectArchivos() {
-    event.stopPropagation()
-    var select = document.getElementById("select-archivos");
-    select.classList.toggle("active");
+function abrirSelectArchivos(e) {
+    if (e.classList.contains("active")) {
+        event.stopPropagation()
+        var select = document.getElementById("select-archivos");
+        select.classList.toggle("active");
+    }
 }
 
 /**
@@ -309,6 +313,7 @@ function resume(datos) {
     var mesOption = meses.options[meses.selectedIndex].value;
     var orden = document.getElementById("orden");
     var disposicion = orden.options[orden.selectedIndex].value;
+    var pdf = document.getElementById("pdfOption");
     var macro = document.getElementById("macroOption");
     var audit = document.getElementById("auditOption");
     var xml = document.getElementById("xmlOption");
@@ -321,7 +326,7 @@ function resume(datos) {
         }
     }
 
-    if (!((anioOption >= 0 && mesOption >= 0 && seleccionados > 0) && ((xml.checked && disposicion >= 0) || macro.checked || audit.checked))) {
+    if (!((anioOption >= 0 && mesOption >= 0 && seleccionados > 0) && ((xml.checked && disposicion >= 0) || macro.checked || audit.checked || pdf.checked))) {
 
         var iconAnio = anioOption >= 0 ? 'fa-check' : 'fa-xmark';
         var iconMes = mesOption >= 1 ? 'fa-check' : 'fa-xmark';
@@ -385,12 +390,14 @@ function resume(datos) {
         }
 
         var archivosADescargar = ""
-        if (macro.checked || audit.checked  && xml.checked) {
-            archivosADescargar = "Se descargará Reportes y XML.";
+        if (macro.checked || audit.checked && xml.checked && pdf.checked) {
+            archivosADescargar = "Se descargará varios archivos";
         } else if (macro.checked || audit.checked) {
             archivosADescargar = "Se descargará Reportes.";
-        } else {
+        } else if (xml.checked) {
             archivosADescargar = "Se descargará XML.";
+        } else if (pdf.checked) {
+            archivosADescargar = "Se descargará CFDI.";
         }
 
         axios.post(datos,
@@ -408,7 +415,7 @@ function resume(datos) {
 
             Swal.fire({
                 title: 'Confirmar descarga',
-                html: 'XMLs: ' + json[0] + " archivos.<br>ISR: " + monto + " MXN.<br>" + archivosADescargar,
+                html: 'Archivos: ' + json[0] + " archivos.<br>ISR: " + monto + " MXN.<br>" + archivosADescargar,
                 icon: 'question',
                 iconColor: '#A02141',
                 confirmButtonText: 'Descargar',
@@ -440,6 +447,7 @@ async function elegirDescarga() {
     var macro = document.getElementById("macroOption");
     var xml = document.getElementById("xmlOption");
     var auditoria = document.getElementById("auditOption");
+    var pdf = document.getElementById("pdfOption");
 
     $.blockUI({
         message: '<h1>Comprimiendo archivos...</h1>',
@@ -451,13 +459,16 @@ async function elegirDescarga() {
         }
     });
 
-    if ((macro.checked || auditoria.checked) && xml.checked) {
-       await descargarXls("/DescargasXml/DescargarXls");
-       await descargarXml("/DescargasXml/DescargarXml");
-    } else if (macro.checked || auditoria.checked) {
-        await descargarXls("/DescargasXml/DescargarXls");
-    } else {
-       await descargarXml("/DescargasXml/DescargarXml");
+    if (pdf.checked) {
+        await descargarPdf("/descargasXml/DescargarCfdi");
+    }
+
+    if (xml.checked) {
+        await descargarXml("/DescargasXml/DescargarXml");
+    }
+
+    if (macro.checked || auditoria.checked) {
+        await descargarXml("/DescargasXml/DescargarXls");
     }
 
     $.unblockUI();
@@ -474,6 +485,58 @@ async function elegirDescarga() {
 
     obtenerMeses("/DescargasXml/DescargasXml");
     obtenerPartidas('/DescargasXml/ListaPartidas');
+}
+
+async function descargarPdf(controlador) {
+    var anio = document.getElementById("anios").value;
+    var select = document.getElementById("meses");
+    var mes = select.value;
+    var nombreMes = select.options[select.selectedIndex].text.toLowerCase();
+    var partidas = document.getElementsByClassName("seleccion");
+    var lista = "";
+    var i = 0;
+
+    for (let partida of partidas) {
+        if (partida.checked) {
+
+            if (i != 0) {
+                lista += ",";
+            }
+            var valor = partida.nextElementSibling.innerHTML.substring(0, 6);
+            lista += valor;
+            i++;
+        }
+    }
+
+    if (mes == 0) {
+        nombreDescarga = 'Reportes_' + anio + '.zip';
+    } else {
+        nombreDescarga = 'Reportes_' + nombreMes + '_' + anio + '.zip';
+    }
+
+    try {
+        const res = await axios.post(controlador,
+            {
+                anio: anio,
+                mes: mes,
+                partidas: lista,
+            },
+            {
+                responseType: 'arraybuffer'
+            });
+
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', nombreDescarga);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (error) {
+        $.unblockUI();
+        openModal("Error", "Ha ocurrido un error, intente de nuevo mas tarde.", "closeModal()");
+        console.log(error);
+    };
 }
 
 /**
@@ -621,6 +684,7 @@ function activarBoton() {
     var orden = document.getElementById("orden");
     var disposicion = orden.options[orden.selectedIndex].value;
     var boton = document.getElementById("boton-descarga");
+    var pdf = document.getElementById("pdfOption");
     var macro = document.getElementById("macroOption");
     var audit = document.getElementById("auditOption")
     var xml = document.getElementById("xmlOption");
@@ -629,6 +693,8 @@ function activarBoton() {
         if (xml.checked) {
             disposicion >= 0 ? boton.classList.remove("disabled") : boton.classList.add("disabled")
         } else if (macro.checked || audit.checked) {
+            boton.classList.remove("disabled")
+        } else if (pdf.checked) {
             boton.classList.remove("disabled")
         } else {
             boton.classList.add("disabled")

@@ -32,6 +32,17 @@ namespace DescargasUI.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> DescargarCfdi(int anio, int mes, string partidas)
+        {
+            string[] lista = partidas.Split(',');
+            byte[] archivos;
+
+            archivos = await DescargasXmlNegocio.ObtenerCfdis(anio, mes, lista);
+
+            return new ZipArchiveResult(archivos);
+        }
+
+        [HttpPost]
         public  async Task<ActionResult> ListaPartidas(int anioSelect)
         {
             Dictionary<string, List<string>> ramos = await DescargasXmlNegocio.ObtenerPartidas(anioSelect);

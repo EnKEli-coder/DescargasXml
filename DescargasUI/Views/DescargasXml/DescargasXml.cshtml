@@ -20,7 +20,6 @@
                     }
                 </select>
                 <span class="custom-arrow"><span class="fa-solid fa-angle-down fa-lg"></span></span>
-                @*@Html.Hidden("anioSelect", null, new { @id = "anioSelect" })*@
             </div>
         </div>
         <div class="input-container">
@@ -36,33 +35,31 @@
         <div class="input-container">
             <label>Archivos</label>
             <div class="select-container" id="select-archivos">
-                <div id="div-select-btn" onclick="abrirSelectArchivos()">
+                <div id="div-select-btn" onclick="abrirSelectArchivos(this)">
                     <span>Escoger archivos</span>
                 </div>
-                <span id="span-archivos" class="custom-arrow "><span class="fa-solid fa-angle-down fa-lg"></span></span>
+                <span id="span-archivos" class="custom-arrow disabled"><span class="fa-solid fa-angle-down fa-lg"></span></span>
                 <div id="select-content">
                     <ul id="lista-archivos">
                         <li>
-                            <input type="checkbox" id="xmlOption" name="xml" value="0" onchange="activarBoton(), activarCarpetas()"/>
+                            <input type="checkbox" id="xmlOption" class="doc-check" name="xml" value="0" onchange="activarBoton(), activarCarpetas()"/>
                             <label for="xml">XML</label>
                         </li>
-                        @*<li><input type="checkbox" name="pdf" value="1" /><label for="pdf">PDF</label></li>*@
                         <li>
-                            <input type="checkbox" id="macroOption" name="macro" value="2" onchange="activarBoton()"/>
+                            <input type="checkbox" id="pdfOption" class="doc-check" name="pdf" value="1"  onchange="activarBoton()" disabled/>
+                            <label for="pdf">CFDI</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="macroOption" class="doc-check" name="macro" value="2" onchange="activarBoton()" />
                             <label for="macro">XLS ISR</label>
                         </li>
                         <li>
-                            <input type="checkbox" id="auditOption" name="audit" value="3" onchange="activarBoton()"/>
+                            <input type="checkbox" id="auditOption" class="doc-check" name="audit" value="3" onchange="activarBoton()" />
                             <label for="audit">XLS Auditoria</label>
                         </li>
                     </ul>
                 </div>
             </div>
-            @*<label>Archivo</label>
-        <div id="archivos-check-container">
-            <input type="checkbox" id="excelOption" value="Excel" class="doc-check disabled" onchange="activarBoton()" disabled /><label>Excel</label>
-            <input type="checkbox" id="xmlOption" value="Xmls" class="doc-check disabled" onclick="activarCarpetas(), activarBoton()" disabled /><label>Xml's</label>
-        </div>*@
         </div> 
         <div class="input-container">
             <label>Estructura</label>

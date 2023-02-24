@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\DescargasXmlDTOs\CfdiDTO.cs" />
     <Compile Include="DTOs\DescargasXmlDTOs\MacroDTO.cs" />
     <Compile Include="DTOs\DescargasXmlDTOs\PartidaDTO.cs" />
     <Compile Include="DTOs\DescargasXmlDTOs\ReporteAudiDTO.cs" />

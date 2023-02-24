@@ -368,6 +368,85 @@ namespace Datos.ProductosNominaDB
             }
         }
 
+        public static async Task<List<CfdiDTO>> ObtenerCfdis(int anio, int mes, string[] partidas)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+                    SqlCommand command = new SqlCommand();
+
+                    string listaPartidas = "";
+                    string meses;
+
+                    int i = 0;
+
+                    List<CfdiDTO> resultados = new List<CfdiDTO>();
+
+                    if (mes == 0)
+                    {
+                        meses = "1,2,3,4,5,6,7,8,9,10,11,12";
+                    }
+                    else
+                    {
+                        meses = mes.ToString();
+                    }
+
+                    foreach (var partida in partidas)
+                    {
+                        if (i != 0)
+                        {
+                            listaPartidas += ",";
+                        }
+                        listaPartidas += "'" + partida + "'";
+                        i++;
+                    }
+
+                    string anioInterfaz = "";
+                    if (anio != DateTime.Now.Year)
+                    {
+                        anioInterfaz = "" + anio;
+                    }
+
+                    command.CommandTimeout = 300;
+                    command.Connection = connection;
+
+                    command.CommandText = $"SELECT Archivo, MONTH(FechaPago), Quincena, Adicional, Folio, Partida, Ruta " +
+                        $"FROM ProductosNomina.dbo.RutasCFDI " +
+                        $"WHERE YEAR(FechaPago) = {anio} " +
+                        $"AND Partida IN (" + listaPartidas + ") " +
+                        $"ORDER BY FechaPago";
+
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                    while (reader.Read())
+                    {
+                        string nombre = reader[0].ToString();
+                        string month = reader[1].ToString();
+                        string numqna = reader[2].ToString();
+                        string adicional = reader[3].ToString();
+                        string ruta = reader[6].ToString();
+
+
+                        resultados.Add(new CfdiDTO
+                        {
+                            Nombre = nombre,
+                            Mes = month,
+                            NumQna = numqna,
+                            Adicional = adicional,
+                            Ruta = ruta
+                        });
+                    }
+                    return resultados;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static async Task<List<ReporteAudiDTO>> ObtenerDatosAuditoria(int anio, int mes, string[] partidas)
         {
             try

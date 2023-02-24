@@ -166,7 +166,7 @@ body label {
     position: absolute;
     top: 0;
     right: 0;
-    height: 36px;
+    height: 100%;
     width: 3.5rem;
     background: #A02141;
     border-radius: 0px 4px 4px 0px;
@@ -205,6 +205,10 @@ body label {
 
 #select-archivos > #select-content::-webkit-scrollbar {
     width: 0px;
+}
+
+#div-select-archivos {
+
 }
 
 #lista-archivos > li{
@@ -284,7 +288,7 @@ input[type="checkbox"]:checked:After {
     display: block;
 }
 
-.doc-check.disabled {
+.doc-check:disabled {
     margin: 0;
     border-color: rgb(160 33 65 / 0.35);
 }

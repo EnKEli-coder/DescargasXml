@@ -567,6 +567,7 @@ namespace Negocio
             sheetDepIsr.Cells[rowCount, 5].Style.Font.Color.SetColor(Color.White);
             sheetDepIsr.Cells[rowCount, 5].Value = "ISR RETENCIONES POR ASIMILADOS A SALARIOS";
             rowCount++;
+            columnCount = 5;
 
             foreach (var departamento in ramos)
             {
@@ -634,6 +635,7 @@ namespace Negocio
 
             return arrayDeBytesZip;
         }
+
         public static string SinTildes(string texto)
         {
             string sinTilde = new String(
