@@ -1,2 +1,2 @@
-# DescargasXml
-Web application for downloading XML archives
+# GestionCFDIs
+Aplicación web para descargar, cargar y generar reportes en materia de CFDIs.
