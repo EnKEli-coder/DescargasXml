@@ -321,97 +321,6 @@ namespace Negocio
             }
 
             return arrayDeBytesZip;
-
-            //DateTimeFormatInfo dateInfo = new CultureInfo("es-ES", false).DateTimeFormat;
-
-            //var count = 0;
-
-            //foreach(var cfdi in cfdis)
-            //{
-            //    cfdi.Mes = dateInfo.GetMonthName(Convert.ToInt32(cfdi.Mes)).ToUpper();
-            //}
-
-            //var meses = cfdis.GroupBy(x => x.Mes);
-
-            //try
-            //{
-            //    var username = "finanzas\\diego.ruz";
-            //    var password = "Analista101";
-            //    var raiz = @"C:\Reporte\CFDI";
-
-            //    Directory.CreateDirectory(raiz);
-
-            //    NetworkShare.ConnectToShare(@"\\172.19.3.172\E", username, password);
-
-            //    if (Directory.Exists(@"\\172.19.3.172\E\Descargas_CFDI\"+anio))
-            //    {
-            //        string carpetaDescargas = @"\\172.19.3.172\E\Descargas_CFDI\"+anio;
-
-            //        foreach(var m in meses)
-            //        {
-            //            string carpetaMes = carpetaDescargas + @"\" + m.Key;
-
-            //            if (Directory.Exists(carpetaMes))
-            //            {
-            //                var qnas = m.ToList().GroupBy(x => x.NumQna);
-
-            //                foreach(var qna in qnas)
-            //                {
-            //                    string carpetaQna= carpetaMes + @"\" + qna.Key;
-            //                    string carpetaAdic = carpetaMes + @"\ADIC";
-
-            //                    if (Directory.Exists(carpetaQna))
-            //                    {
-            //                        string carpetaArchivos;
-            //                        foreach (var cfdi in qna)
-            //                        {
-            //                            if(cfdi.Adicional == "") {
-            //                                carpetaArchivos = carpetaQna; 
-            //                            } else {
-            //                                carpetaArchivos = carpetaAdic;
-            //                            }
-
-            //                            var files = Directory.GetFiles(carpetaArchivos, cfdi.Nombre + ".pdf").FirstOrDefault();
-
-            //                            if (files != null){
-            //                                File.Copy(files, raiz + "\\" + cfdi.Nombre + ".pdf");
-            //                            }
-            //                        }
-            //                    }
-            //                }
-
-            //            }
-
-            //        }
-
-            //    }
-            //    NetworkShare.DisconnectFromShare(@"\\172.19.3.172\E", false);
-
-            //    string zip = raiz + ".zip";
-
-            //    if (Directory.Exists(raiz))
-            //    {
-            //        if (!Directory.Exists(zip))
-            //        {
-            //            ZipFile.CreateFromDirectory(raiz, zip);
-            //            Directory.Delete(raiz, true);
-            //        }
-            //    }
-
-            //    var arrayDeBytesZip = File.ReadAllBytes(zip);
-
-            //    if (File.Exists(zip))
-            //    {
-            //        File.Delete(zip);
-            //    }
-
-            //    return arrayDeBytesZip;
-            //}
-            //catch(Exception e)
-            //{
-            //    throw;
-            //}
-
         }
 
         public static async Task<byte[]> ObtenerReportes(int anio, int mesEscogido, string[] partidas, Boolean macro, Boolean audit)
@@ -461,7 +370,14 @@ namespace Negocio
             {
                 XmlDocument documento = new XmlDocument();
                 XmlNamespaceManager nm = new XmlNamespaceManager(documento.NameTable);
-                nm.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/3");
+                if (row.contenidoXml.Contains("//www.sat.gob.mx/cfd/3"))
+                {
+                    nm.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/3");
+                }
+                else
+                {
+                    nm.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/4");
+                }
                 nm.AddNamespace("nomina12", "http://www.sat.gob.mx/nomina12");
 
                 byte[] bytes = Encoding.Default.GetBytes(row.contenidoXml);
@@ -663,7 +579,7 @@ namespace Negocio
                 Decimal total = 0;
                 foreach(var meses in departamento.ToList().Where(x => x.tipoRegimen == 2).GroupBy(x => x.fechaPago.Substring(5,2)))
                 {
-                    sheetDepIsr.Cells[rowCount, columnCount].Value = meses.Sum(x => x.isr);
+                    sheetDepIsr.Cells[rowCount, Convert.ToInt32(meses.Key) + 4].Value = meses.Sum(x => x.isr);
                     total += meses.Sum(x => x.isr);
                     columnCount++;
                 }
@@ -676,7 +592,7 @@ namespace Negocio
 
             foreach (var mes in porMeses)
             {
-                sheetDepIsr.Cells[rowCount, columnCount].Value = mes.ToList().Where(x => x.tipoRegimen == 2).Sum(x => x.isr);
+                sheetDepIsr.Cells[rowCount, Convert.ToInt32(mes.Key) + 4].Value = mes.ToList().Where(x => x.tipoRegimen == 2).Sum(x => x.isr);
                 columnCount++;
             }
 
@@ -700,7 +616,7 @@ namespace Negocio
                 Decimal total = 0;
                 foreach (var meses in departamento.ToList().Where(x => x.tipoRegimen == 9).GroupBy(x => x.fechaPago.Substring(5, 2)))
                 {
-                    sheetDepIsr.Cells[rowCount, Convert.ToInt32(meses.Key) + 5].Value = meses.Sum(x => x.isr);
+                    sheetDepIsr.Cells[rowCount, Convert.ToInt32(meses.Key) + 4].Value = meses.Sum(x => x.isr);
                     total += meses.Sum(x => x.isr);
                     columnCount++;
                 }
@@ -712,7 +628,7 @@ namespace Negocio
 
             foreach (var mes in porMeses)
             {
-                sheetDepIsr.Cells[rowCount, Convert.ToInt32(mes.Key) + 5].Value = mes.ToList().Where(x => x.tipoRegimen == 9).Sum(x => x.isr);
+                sheetDepIsr.Cells[rowCount, Convert.ToInt32(mes.Key) + 4].Value = mes.ToList().Where(x => x.tipoRegimen == 9).Sum(x => x.isr);
                 columnCount++;
             }
 

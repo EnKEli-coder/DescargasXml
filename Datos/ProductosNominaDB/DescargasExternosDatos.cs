@@ -355,17 +355,15 @@ namespace Datos.ProductosNominaDB
 
                     command.CommandTimeout = 300;
                     command.Connection = connection;
-                    command.CommandText = $"SELECT SUBSTRING(a.PARTIDA,1,3) AS ramo, n.descrip, p.Departamento , p.numqna, p.foliofiscal, p.Rfc, p.TipoRegimen, p.ISR, p.contenidoXML " +
-                        $"FROM ProductosNomina.dbo.TBL_layoutXML p INNER JOIN Interfaces{anioInterfaz}.dbo.ACUM{anio} a " +
-                        $"ON p.folio = a.FOLIOCFDI " +
-                        $"LEFT JOIN nomina.dbo.nom_cat_a_part_{anio} n ON SUBSTRING(p.departamento, 1, 2) COLLATE MODERN_SPANISH_CI_AS = n.PART " +
-                        $"WHERE SUBSTRING(a.PARTIDA,1,6) IN (" + listaPartidas + ") " +
+                    command.CommandText = $"SELECT CONCAT(n.cve_poder, SUBSTRING(p.departamento, 1, 2) COLLATE MODERN_SPANISH_CI_AS ) AS ramo, n.descrip, p.Departamento , p.numqna, p.foliofiscal, p.Rfc, p.TipoRegimen, p.ISR, p.contenidoXML " +
+                        $"FROM ProductosNomina.dbo.TBL_layoutXML_Externos p " +
+                        $"LEFT JOIN nomina.dbo.nom_cat_a_part_{anio} n ON SUBSTRING(p.Departamento, 1, 2) COLLATE MODERN_SPANISH_CI_AS = n.PART " +
+                        $"where LEFT(p.Departamento,CHARINDEX(' ', p.Departamento) -1) in (" + listaPartidas + ") " +
                         $"AND YEAR(p.FechaPago) = " + anio + " " +
                         $"AND MONTH(p.FechaPago) = " + mes + " " +
-                        $"AND a.NOMINA_F <> '03' " +
                         $"AND p._Status = 'E' " +
                         $"AND SUBSTRING(Archivo,32,3) != 'VTE' " +
-                        $"ORDER BY a.PARTIDA";
+                        $"ORDER BY LEFT(p.Departamento,CHARINDEX(' ', p.Departamento) -1)";
 
                     SqlDataReader reader = await command.ExecuteReaderAsync();
 

@@ -1,6 +1,0 @@
-C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\bin\Release\Entidades.dll
-C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\bin\Release\Entidades.pdb
-C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\obj\Release\Entidades.csproj.AssemblyReference.cache
-C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\obj\Release\Entidades.csproj.CoreCompileInputs.cache
-C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\obj\Release\Entidades.dll
-C:\Users\Recursos Humanos\source\repos\DescargasUI\Entidades\obj\Release\Entidades.pdb

@@ -77,7 +77,7 @@ namespace DescargasUI.Controllers
             byte[] archivos;
             
             archivos = await DescargasXmlNegocio.ObtenerReportes(anio, mes, lista, macro, audit);
-            //return File(archivos, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); ;
+            //return File(archivos, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             return new ZipArchiveResult(archivos);
         }
 

@@ -91,20 +91,16 @@ async function obtenerPartidas(url) {
     var selectArchivos = document.getElementById("div-select-btn");
     var spanArchivos = document.getElementById("span-archivos");
     var checkCfdi = document.getElementById("pdfOption");
-
-    //var checkAll = document.getElementById("container-mark-all");
     var lista = document.getElementById("lista-partidas");
-   // checkAll.style.display = "none";
+    var cargando = document.getElementById("carga");
+    var anio = document.getElementById("anios").value;
+
     lista.style.display = "none";
     buscar.setAttribute("disabled", "");
     botonBuscar.setAttribute("disabled", "");
     selectArchivos.classList.remove("active");
     checkCfdi.setAttribute("disabled", "");
-
-    var cargando = document.getElementById("carga");
     cargando.style.display = "inline-block";
-
-    var anio = document.getElementById("anios").value;
 
     try {
         const res = await axios.post(url,
@@ -123,7 +119,6 @@ async function obtenerPartidas(url) {
             var label = document.createElement("label")
             var i = document.createElement("i");
 
-
             li.className = "parent-list-item";
             input.type = "checkbox";
             input.className = "ramos";
@@ -137,7 +132,6 @@ async function obtenerPartidas(url) {
 
             lista.insertAdjacentElement('beforeend', li);
             var ul = document.createElement("ul");
-
 
             for (var partida in json[unidad]) {
 
@@ -159,8 +153,6 @@ async function obtenerPartidas(url) {
 
             cargando.style.display = "none";
             lista.style.display = "block";
-            //checkAll.style.display = "flex";
-
 
             boton.classList.add("disabled");
 
@@ -213,8 +205,6 @@ function busqueda() {
         var cargando = document.getElementById("carga");
         var todos = document.getElementById("check-all");
 
-        //buscar.setAttribute("disabled", "");
-        //botonBuscar.setAttribute("disabled", "");
         lista.style.display = "none";
         noResult.style.display = "none"
         cargando.style.display = "inline-block";
@@ -239,7 +229,6 @@ function busqueda() {
                 var label = document.createElement("label")
                 var i = document.createElement("i");
 
-
                 li.className = "parent-list-item";
                 input.type = "checkbox";
                 input.className = "ramos";
@@ -250,10 +239,8 @@ function busqueda() {
                 li.appendChild(i);
                 li.appendChild(input);
                 li.appendChild(label);
-
                 lista.insertAdjacentElement('beforeend', li);
                 var ul = document.createElement("ul");
-
 
                 for (var partida in listaFiltrada[unidad]) {
 
@@ -283,9 +270,6 @@ function busqueda() {
         } else {
             cargando.style.display = "none";
             noResult.style.display = "inline-block";
-            //buscar.removeAttribute("disabled", "");
-            //botonBuscar.removeAttribute("disabled", "");
-            //buscar.focus();
             todos.checked = false;
         }
     }, 100)
@@ -468,7 +452,7 @@ async function elegirDescarga() {
     }
 
     if (macro.checked || auditoria.checked) {
-        await descargarXml("/DescargasXml/DescargarXls");
+        await descargarXls("/DescargasXml/DescargarXls");
     }
 
     $.unblockUI();
@@ -509,9 +493,9 @@ async function descargarPdf(controlador) {
     }
 
     if (mes == 0) {
-        nombreDescarga = 'Reportes_' + anio + '.zip';
+        nombreDescarga = 'CFDIS_' + anio + '.zip';
     } else {
-        nombreDescarga = 'Reportes_' + nombreMes + '_' + anio + '.zip';
+        nombreDescarga = 'CFDIS_' + nombreMes + '_' + anio + '.zip';
     }
 
     try {
@@ -535,7 +519,10 @@ async function descargarPdf(controlador) {
     } catch (error) {
         $.unblockUI();
         openModal("Error", "Ha ocurrido un error, intente de nuevo mas tarde.", "closeModal()");
-        console.log(error);
+        let message = String.fromCharCode.apply(
+            null,
+            new Uint8Array(error.body));
+        console.log(message);
     };
 }
 
@@ -596,7 +583,10 @@ async function descargarXls(controlador) {
     } catch (error) {
         $.unblockUI();
         openModal("Error", "Ha ocurrido un error, intente de nuevo mas tarde.", "closeModal()");
-        console.log(error);
+        let message = String.fromCharCode.apply(
+            null,
+            new Uint8Array(error.body));
+        console.log(message);
     };
 }
 
@@ -672,7 +662,10 @@ async function descargarXml(controlador) {
     } catch (error) {
         $.unblockUI();
         openModal("Error", "Ha ocurrido un error, intente de nuevo mas tarde.", "closeModal()");
-        console.log(error);
+        let message = String.fromCharCode.apply(
+            null,
+            new Uint8Array(error.body));
+        console.log(message);
     }
     
 }

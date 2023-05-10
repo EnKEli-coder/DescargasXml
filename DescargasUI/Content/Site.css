@@ -24,6 +24,7 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+
 main {
     display: flex;
     flex-direction: column;
@@ -209,6 +210,17 @@ nav a:active, nav a:hover {
     pointer-events: all;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
 
 
 @media (max-width: 1366px){

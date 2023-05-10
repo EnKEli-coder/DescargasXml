@@ -468,7 +468,7 @@ namespace Negocio
 
             DateTimeFormatInfo dateInfo = new CultureInfo("es-ES", false).DateTimeFormat;
 
-            var nuevo = @"C:\Reporte\Macro.xlsx";
+            var nuevo = @"C:\Reporte\Reportes\Macro.xlsx";
             var archivoBase = Path.Combine(HttpContext.Current.Server.MapPath("~/"), "Recursos/PlantillaXlsMacro.xlsx");
             var hojasMes = Path.Combine(HttpContext.Current.Server.MapPath("~/"), "Recursos/PlantillaMesMacro.xlsx");
 
@@ -540,7 +540,7 @@ namespace Negocio
                 Decimal total = 0;
                 foreach (var meses in departamento.ToList().Where(x => x.tipoRegimen == 2).GroupBy(x => x.fechaPago.Substring(5, 2)))
                 {
-                    sheetDepIsr.Cells[rowCount, Convert.ToInt32(meses.Key)+5].Value = meses.Sum(x => x.isr);
+                    sheetDepIsr.Cells[rowCount, Convert.ToInt32(meses.Key)+ 4].Value = meses.Sum(x => x.isr);
                     total += meses.Sum(x => x.isr);
                     columnCount++;
                 }
@@ -553,7 +553,7 @@ namespace Negocio
 
             foreach (var mes in porMeses)
             {
-                sheetDepIsr.Cells[rowCount, Convert.ToInt32(mes.Key) + 5].Value = mes.ToList().Where(x => x.tipoRegimen == 2).Sum(x => x.isr);
+                sheetDepIsr.Cells[rowCount, Convert.ToInt32(mes.Key) + 4].Value = mes.ToList().Where(x => x.tipoRegimen == 2).Sum(x => x.isr);
                 columnCount++;
             }
 
@@ -577,7 +577,7 @@ namespace Negocio
                 Decimal total = 0;
                 foreach (var meses in departamento.ToList().Where(x => x.tipoRegimen == 9).GroupBy(x => x.fechaPago.Substring(5, 2)))
                 {
-                    sheetDepIsr.Cells[rowCount, Convert.ToInt32(meses.Key) + 5].Value = meses.Sum(x => x.isr);
+                    sheetDepIsr.Cells[rowCount, Convert.ToInt32(meses.Key) + 4].Value = meses.Sum(x => x.isr);
                     total += meses.Sum(x => x.isr);
                     columnCount++;
                 }
@@ -589,7 +589,7 @@ namespace Negocio
 
             foreach (var mes in porMeses)
             {
-                sheetDepIsr.Cells[rowCount, Convert.ToInt32(mes.Key) + 5].Value = mes.ToList().Where(x => x.tipoRegimen == 9).Sum(x => x.isr);
+                sheetDepIsr.Cells[rowCount, Convert.ToInt32(mes.Key) + 4].Value = mes.ToList().Where(x => x.tipoRegimen == 9).Sum(x => x.isr);
                 columnCount++;
             }
 
@@ -627,11 +627,6 @@ namespace Negocio
             excel.Save();
 
             var arrayDeBytesZip = File.ReadAllBytes(nuevo);
-
-            if (File.Exists(nuevo))
-            {
-                File.Delete(nuevo);
-            }
 
             return arrayDeBytesZip;
         }
